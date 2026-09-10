@@ -1,0 +1,209 @@
+.vs-topbar {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  background: linear-gradient(180deg, var(--vs-surface) 0%, var(--vs-bg-deep) 100%);
+}
+
+.vs-topbar__inner {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: var(--vs-space-4);
+  height: var(--vs-topbar-height);
+  max-width: var(--vs-content-max);
+  margin: 0 auto;
+  padding: 0 var(--vs-space-5);
+}
+
+.vs-topbar__rule {
+  max-width: var(--vs-content-max);
+  margin: 0 auto;
+}
+
+/* Brand ------------------------------------------------------------------ */
+.vs-topbar__brand {
+  display: flex;
+  align-items: center;
+  gap: var(--vs-space-3);
+}
+
+/* Original mark: a small faceted lozenge, drawn in CSS. No borrowed iconography. */
+.vs-topbar__sigil {
+  width: 16px;
+  height: 16px;
+  flex: none;
+  background: linear-gradient(140deg, var(--vs-emerald) 0%, var(--vs-kokiri) 100%);
+  clip-path: polygon(50% 0, 100% 28%, 100% 72%, 50% 100%, 0 72%, 0 28%);
+  box-shadow: 0 0 10px rgba(89, 211, 107, 0.35);
+}
+
+.vs-topbar__wordmark {
+  font-size: var(--vs-text-md);
+  white-space: nowrap;
+}
+
+/* Nav -------------------------------------------------------------------- */
+.vs-topbar__nav {
+  justify-self: center;
+}
+
+.vs-topbar__navlist {
+  display: flex;
+  align-items: center;
+  gap: var(--vs-space-1);
+}
+
+.vs-topbar__navitem {
+  position: relative;
+  padding: var(--vs-space-2) var(--vs-space-4);
+  font-size: var(--vs-text-2xs);
+  font-weight: var(--vs-weight-medium);
+  letter-spacing: var(--vs-track-wide);
+  color: var(--vs-stone);
+  transition: color var(--vs-dur-fast) var(--vs-ease);
+}
+
+.vs-topbar__navitem:hover {
+  color: var(--vs-parchment);
+}
+
+.vs-topbar__navitem[data-active='true'] {
+  color: var(--vs-gold-bright);
+}
+
+/* Active marker is a gold underline — geometry, not colour alone. */
+.vs-topbar__navitem[data-active='true']::after {
+  content: '';
+  position: absolute;
+  left: var(--vs-space-3);
+  right: var(--vs-space-3);
+  bottom: 2px;
+  height: var(--vs-bracket-weight);
+  background: var(--vs-gold);
+  transition: transform var(--vs-dur-fast) var(--vs-ease-out);
+}
+
+/* Actions ---------------------------------------------------------------- */
+.vs-topbar__actions {
+  display: flex;
+  align-items: center;
+  gap: var(--vs-space-3);
+}
+
+.vs-topbar__conn {
+  display: flex;
+  align-items: center;
+  gap: var(--vs-space-2);
+  min-height: 32px;
+  padding: var(--vs-space-1) var(--vs-space-3);
+  border: 1px solid var(--vs-border);
+  background: var(--vs-surface);
+  clip-path: var(--vs-clip-tile);
+  font-family: var(--vs-font-data);
+  font-size: var(--vs-text-2xs);
+  letter-spacing: var(--vs-track-tight);
+  color: var(--vs-stone);
+  transition:
+    border-color var(--vs-dur-fast) var(--vs-ease),
+    color var(--vs-dur-fast) var(--vs-ease);
+}
+
+.vs-topbar__conn:hover {
+  border-color: var(--vs-navi-edge);
+  color: var(--vs-parchment);
+}
+
+/* Connected: emerald = healthy. VIP: temple gold = premium/verified. */
+.vs-topbar__conn[data-tier='FREE'] { color: var(--vs-emerald); }
+.vs-topbar__conn[data-tier='VIP'] { color: var(--vs-gold); }
+.vs-topbar__conn[data-tier='NONE'] { color: var(--vs-stone); }
+
+.vs-topbar__connlabel {
+  white-space: nowrap;
+  max-width: 190px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Tactile button: small physical depth, strong pressed state. */
+.vs-topbar__vip {
+  min-height: 32px;
+  padding: var(--vs-space-1) var(--vs-space-4);
+  background: linear-gradient(180deg, var(--vs-gold-bright) 0%, var(--vs-gold) 100%);
+  color: #1a1405;
+  clip-path: var(--vs-clip-tile);
+  font-family: var(--vs-font-ui);
+  font-size: var(--vs-text-2xs);
+  font-weight: var(--vs-weight-bold);
+  letter-spacing: var(--vs-track-wide);
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.28);
+  transition:
+    transform var(--vs-dur-instant) var(--vs-ease),
+    box-shadow var(--vs-dur-instant) var(--vs-ease);
+}
+
+/* Brighten via filter rather than a one-off hex, per the no-raw-values rule. */
+.vs-topbar__vip:hover {
+  filter: brightness(1.08);
+}
+
+.vs-topbar__vip:active {
+  transform: translateY(1px);
+  box-shadow: var(--vs-press);
+}
+
+/* Responsive ------------------------------------------------------------- */
+
+/* Below lg the nav moves out of the bar; the shell renders a bottom rail. */
+@media (max-width: 1023px) {
+  .vs-topbar__nav {
+    display: none;
+  }
+
+  .vs-topbar__inner {
+    grid-template-columns: auto 1fr;
+    padding: 0 var(--vs-space-4);
+  }
+
+  .vs-topbar__actions {
+    justify-self: end;
+  }
+}
+
+@media (max-width: 767px) {
+  .vs-topbar__connlabel {
+    max-width: 96px;
+  }
+
+  .vs-topbar__conn,
+  .vs-topbar__vip {
+    min-height: var(--vs-touch-min);
+  }
+}
+
+/* The compact label only appears once the full one is dropped. */
+.vs-topbar__conncompact {
+  display: none;
+  font-size: var(--vs-text-2xs);
+  letter-spacing: var(--vs-track-wide);
+}
+
+@media (max-width: 479px) {
+  .vs-topbar__wordmark {
+    font-size: var(--vs-text-sm);
+  }
+
+  /* Swap the handle for a single word rather than leaving a bare dot (V-04). */
+  .vs-topbar__connlabel {
+    display: none;
+  }
+
+  .vs-topbar__conncompact {
+    display: inline;
+  }
+
+  .vs-topbar__conn {
+    padding: var(--vs-space-1) var(--vs-space-2);
+  }
+}

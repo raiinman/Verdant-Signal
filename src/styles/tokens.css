@@ -1,0 +1,178 @@
+/**
+ * VERDANT SIGNAL — design tokens
+ *
+ * The single source of truth for colour, type, spacing, geometry, depth, motion,
+ * focus and selection. Components consume these variables and never hard-code a
+ * raw value. See CLAUDE.md §3.6.
+ */
+
+:root {
+  /* ---------------------------------------------------------------- COLOUR */
+  /* Surfaces — dark forest floor rising to carved panel. Never pure black. */
+  --vs-bg-deep: #08110c;
+  --vs-surface: #101c14;
+  --vs-panel: #17241a;
+  --vs-moss: #233524;
+
+  /* Accents — each has exactly one semantic job. See CLAUDE.md §3.2. */
+  --vs-kokiri: #3e8f47;
+  --vs-emerald: #59d36b;
+  --vs-navi: #55dde0;
+  --vs-hylian: #315c8c;
+  --vs-gold: #d5a943;
+  --vs-gold-bright: #f0c85a;
+  --vs-danger: #b93a3a;
+  --vs-critical: #e45a4f;
+
+  /* Text — parchment over stone. Never pure white. */
+  --vs-parchment: #e8e1c8;
+  --vs-stone: #9ba796;
+
+  /* Derived tints. Kept as tokens so no component invents an alpha value. */
+  --vs-navi-dim: rgba(85, 221, 224, 0.14);
+  --vs-navi-edge: rgba(85, 221, 224, 0.34);
+  --vs-gold-dim: rgba(213, 169, 67, 0.13);
+  --vs-gold-edge: rgba(213, 169, 67, 0.38);
+  --vs-emerald-dim: rgba(89, 211, 107, 0.12);
+  --vs-emerald-edge: rgba(89, 211, 107, 0.32);
+  --vs-danger-dim: rgba(185, 58, 58, 0.14);
+  --vs-danger-edge: rgba(185, 58, 58, 0.36);
+  --vs-stone-dim: rgba(155, 167, 150, 0.10);
+
+  /* Semantic aliases — components reference intent, not hue. */
+  --vs-live: var(--vs-navi);
+  --vs-verified: var(--vs-gold);
+  --vs-positive: var(--vs-emerald);
+  --vs-negative: var(--vs-critical);
+  --vs-locked: var(--vs-stone);
+
+  /* ------------------------------------------------------------- BORDERS */
+  /* Engraved separator: a dark cut with a light lip below it. */
+  --vs-line: rgba(0, 0, 0, 0.55);
+  --vs-lip: rgba(232, 225, 200, 0.055);
+  --vs-border: rgba(232, 225, 200, 0.10);
+  --vs-border-strong: rgba(232, 225, 200, 0.17);
+  --vs-border-hair: rgba(232, 225, 200, 0.06);
+
+  /* ---------------------------------------------------------------- TYPE */
+  --vs-font-data: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+  --vs-font-display: 'Iowan Old Style', 'Palatino Linotype', Palatino, Georgia,
+    'Times New Roman', serif;
+  --vs-font-ui: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+    'Helvetica Neue', sans-serif;
+
+  /* 9-step scale. Floor is 11px — the reference's 8–9.5px labels are unreadable. */
+  --vs-text-2xs: 0.6875rem; /* 11px */
+  --vs-text-xs: 0.75rem;    /* 12px */
+  --vs-text-sm: 0.8125rem;  /* 13px */
+  --vs-text-base: 0.875rem; /* 14px */
+  --vs-text-md: 1rem;       /* 16px */
+  --vs-text-lg: 1.125rem;   /* 18px */
+  --vs-text-xl: 1.375rem;   /* 22px */
+  --vs-text-2xl: 1.75rem;   /* 28px */
+  --vs-text-3xl: 2.25rem;   /* 36px */
+
+  --vs-weight-normal: 400;
+  --vs-weight-medium: 500;
+  --vs-weight-bold: 700;
+
+  --vs-track-tight: 0.01em;
+  --vs-track-wide: 0.08em;
+  --vs-track-display: 0.14em;
+
+  --vs-leading-tight: 1.15;
+  --vs-leading-normal: 1.5;
+
+  /* -------------------------------------------------------------- SPACING */
+  /* 4px base. */
+  --vs-space-1: 0.25rem;
+  --vs-space-2: 0.5rem;
+  --vs-space-3: 0.75rem;
+  --vs-space-4: 1rem;
+  --vs-space-5: 1.25rem;
+  --vs-space-6: 1.5rem;
+  --vs-space-8: 2rem;
+  --vs-space-10: 2.5rem;
+  --vs-space-12: 3rem;
+
+  /* ------------------------------------------------------------- GEOMETRY */
+  /* Restrained radii, plus the clip depth that produces beveled corners. */
+  --vs-radius-none: 0;
+  --vs-radius-sm: 2px;
+  --vs-radius-md: 3px;
+  --vs-radius-lg: 5px;
+  --vs-bevel: 10px;      /* corner cut on major panels */
+  --vs-bevel-sm: 6px;    /* corner cut on tiles and chips */
+
+  /* Beveled panel: an octagonal clip standing in for a carved stone plate. */
+  --vs-clip-panel: polygon(
+    var(--vs-bevel) 0, calc(100% - var(--vs-bevel)) 0, 100% var(--vs-bevel),
+    100% calc(100% - var(--vs-bevel)), calc(100% - var(--vs-bevel)) 100%,
+    var(--vs-bevel) 100%, 0 calc(100% - var(--vs-bevel)), 0 var(--vs-bevel)
+  );
+  --vs-clip-tile: polygon(
+    var(--vs-bevel-sm) 0, 100% 0, 100% calc(100% - var(--vs-bevel-sm)),
+    calc(100% - var(--vs-bevel-sm)) 100%, 0 100%, 0 var(--vs-bevel-sm)
+  );
+
+  /* ---------------------------------------------------------------- DEPTH */
+  --vs-shadow-inset: inset 0 1px 0 rgba(232, 225, 200, 0.05),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.4);
+  --vs-shadow-panel: 0 1px 2px rgba(0, 0, 0, 0.5), 0 4px 14px rgba(0, 0, 0, 0.35);
+  --vs-shadow-raised: 0 2px 4px rgba(0, 0, 0, 0.55), 0 8px 28px rgba(0, 0, 0, 0.45);
+  --vs-shadow-drawer: -8px 0 40px rgba(0, 0, 0, 0.6);
+  --vs-press: inset 0 2px 4px rgba(0, 0, 0, 0.55);
+
+  /* Glow is rationed — live data and focus only, never decoration. */
+  --vs-glow-navi: 0 0 0 1px var(--vs-navi-edge), 0 0 12px rgba(85, 221, 224, 0.18);
+  --vs-glow-gold: 0 0 0 1px var(--vs-gold-edge), 0 0 12px rgba(213, 169, 67, 0.16);
+
+  /* --------------------------------------------------------------- MOTION */
+  --vs-dur-instant: 100ms;
+  --vs-dur-fast: 160ms;
+  --vs-dur-base: 200ms;
+  --vs-dur-slow: 220ms;
+  --vs-ease: cubic-bezier(0.2, 0.8, 0.3, 1);
+  --vs-ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+
+  /* ---------------------------------------------------------------- FOCUS */
+  --vs-focus-width: 2px;
+  --vs-focus-offset: 2px;
+  --vs-focus-color: var(--vs-navi);
+  --vs-focus-ring: var(--vs-focus-width) solid var(--vs-focus-color);
+
+  /* ------------------------------------------------------------ SELECTION */
+  --vs-bracket-size: 9px;
+  --vs-bracket-weight: 2px;
+  --vs-bracket-color: var(--vs-gold-bright);
+  --vs-bracket-inset: 3px;
+
+  /* ---------------------------------------------------------------- STATUS */
+  --vs-status-live: var(--vs-navi);
+  --vs-status-stale: var(--vs-gold);
+  --vs-status-unavailable: var(--vs-critical);
+  --vs-status-locked: var(--vs-stone);
+  --vs-status-verified: var(--vs-gold);
+  --vs-status-warning: var(--vs-gold-bright);
+
+  /* ---------------------------------------------------------------- LAYOUT */
+  --vs-layout-terminal: 70fr;
+  --vs-layout-rail: 30fr;
+  --vs-topbar-height: 52px;
+  --vs-content-max: 1600px;
+  --vs-touch-min: 44px;
+
+  /* Breakpoints are documented here and mirrored in media queries.
+     CSS cannot interpolate custom properties into @media, so these are
+     reference values only: sm 480 · md 768 · lg 1024 · xl 1440 */
+}
+
+/* Reduced motion is a global switch, not a per-component afterthought. */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --vs-dur-instant: 0.01ms;
+    --vs-dur-fast: 0.01ms;
+    --vs-dur-base: 0.01ms;
+    --vs-dur-slow: 0.01ms;
+  }
+}

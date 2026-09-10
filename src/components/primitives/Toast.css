@@ -1,0 +1,33 @@
+.vs-toast {
+  position: fixed;
+  left: 50%;
+  bottom: var(--vs-space-6);
+  z-index: 60;
+  transform: translateX(-50%);
+  pointer-events: none;
+}
+
+.vs-toast[data-visible='false'] {
+  visibility: hidden;
+}
+
+.vs-toast__body {
+  display: inline-block;
+  padding: var(--vs-space-3) var(--vs-space-5);
+  background: var(--vs-panel);
+  border: 1px solid var(--vs-gold-edge);
+  clip-path: var(--vs-clip-tile);
+  box-shadow: var(--vs-shadow-raised);
+  font-size: var(--vs-text-xs);
+  letter-spacing: var(--vs-track-tight);
+  color: var(--vs-parchment);
+}
+
+@media (max-width: 479px) {
+  .vs-toast {
+    left: var(--vs-space-3);
+    right: var(--vs-space-3);
+    transform: none;
+    text-align: center;
+  }
+}

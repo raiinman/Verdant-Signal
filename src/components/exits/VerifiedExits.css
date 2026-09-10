@@ -1,0 +1,167 @@
+.vs-exits {
+  padding: var(--vs-space-4) 0 0;
+  min-width: 0;
+}
+
+.vs-exits__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--vs-space-2);
+  padding: 0 var(--vs-space-5) var(--vs-space-3);
+}
+
+.vs-exits__title {
+  font-size: var(--vs-text-lg);
+}
+
+.vs-exits__stats {
+  display: flex;
+  align-items: center;
+  gap: var(--vs-space-2);
+  font-size: var(--vs-text-2xs);
+  letter-spacing: var(--vs-track-tight);
+  color: var(--vs-stone);
+}
+
+.vs-exits__sep {
+  opacity: 0.5;
+}
+
+.vs-exits__list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(178px, 1fr));
+  gap: var(--vs-space-3);
+  padding: var(--vs-space-4) var(--vs-space-5);
+}
+
+/* Exit card: gold-edged plate. Verification reads as a milestone. */
+.vs-exitcard {
+  position: relative;
+  padding: var(--vs-space-3);
+  background: var(--vs-surface);
+  border: 1px solid var(--vs-border);
+  border-top: var(--vs-bracket-weight) solid var(--vs-gold);
+  clip-path: var(--vs-clip-tile);
+  min-width: 0;
+}
+
+.vs-exitcard__top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--vs-space-2);
+}
+
+.vs-exitcard__sym {
+  font-size: var(--vs-text-xs);
+  font-weight: var(--vs-weight-bold);
+  color: var(--vs-parchment);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.vs-exitcard__verify {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  font-family: var(--vs-font-data);
+  font-size: 9px;
+  letter-spacing: var(--vs-track-wide);
+  color: var(--vs-gold);
+  white-space: nowrap;
+}
+
+.vs-exitcard__meta {
+  margin-top: var(--vs-space-1);
+  font-size: 10px;
+  color: var(--vs-stone);
+}
+
+.vs-exitcard__roe {
+  margin-top: var(--vs-space-2);
+  font-size: var(--vs-text-md);
+  font-weight: var(--vs-weight-bold);
+  line-height: 1.1;
+}
+
+.vs-exitcard__pnl {
+  font-size: var(--vs-text-xs);
+}
+
+.vs-exitcard__outcome {
+  margin-top: var(--vs-space-2);
+  font-family: var(--vs-font-data);
+  font-size: 9px;
+  letter-spacing: var(--vs-track-wide);
+  color: var(--vs-gold);
+}
+
+.vs-exitcard__outcome[data-win='false'] {
+  color: var(--vs-stone);
+}
+
+.vs-exitcard__time {
+  font-size: 9px;
+  color: var(--vs-stone);
+  opacity: 0.75;
+}
+
+.vs-exits__foot {
+  padding: 0 var(--vs-space-5) var(--vs-space-4);
+}
+
+.vs-exits__viewall {
+  min-height: 32px;
+  padding: var(--vs-space-2) 0;
+  font-family: var(--vs-font-data);
+  font-size: var(--vs-text-2xs);
+  letter-spacing: var(--vs-track-wide);
+  color: var(--vs-gold-bright);
+}
+
+.vs-exits__viewall:hover {
+  text-decoration: underline;
+}
+
+.vs-exits__empty {
+  padding: var(--vs-space-8) var(--vs-space-5);
+  text-align: center;
+  font-size: var(--vs-text-xs);
+  color: var(--vs-stone);
+}
+
+/* On a phone the exits become a horizontal swipe deck. */
+@media (max-width: 767px) {
+  .vs-exits__head {
+    padding: 0 var(--vs-space-3) var(--vs-space-3);
+  }
+
+  .vs-exits__list {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    padding: var(--vs-space-3);
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+
+  .vs-exits__list::-webkit-scrollbar {
+    display: none;
+  }
+
+  .vs-exitcard {
+    flex: 0 0 68%;
+    scroll-snap-align: start;
+  }
+
+  .vs-exits__foot {
+    padding: 0 var(--vs-space-3) var(--vs-space-4);
+  }
+
+  .vs-exits__viewall {
+    min-height: var(--vs-touch-min);
+  }
+}

@@ -1,0 +1,269 @@
+/**
+ * VERDANT SIGNAL — base layer
+ * Reset, page ground, shared primitives (panel, engraved rule, brackets,
+ * display headings, status dots, masked cells, focus treatment).
+ */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background-color: var(--vs-bg-deep);
+  color: var(--vs-parchment);
+  font-family: var(--vs-font-ui);
+  font-size: var(--vs-text-base);
+  line-height: var(--vs-leading-normal);
+  -webkit-font-smoothing: antialiased;
+}
+
+/**
+ * Page ground: a very low-amplitude vertical gradient plus ~2% fractal noise.
+ * Material suggestion through depth, not a tiled texture (CLAUDE.md §3.4).
+ */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background-image:
+    radial-gradient(120% 80% at 50% 0%, rgba(35, 53, 36, 0.5) 0%, transparent 60%),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='0.022'/%3E%3C/svg%3E");
+}
+
+h1,
+h2,
+h3,
+h4,
+p,
+figure {
+  margin: 0;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+}
+
+a {
+  color: var(--vs-navi);
+  text-decoration-color: var(--vs-navi-edge);
+  text-underline-offset: 2px;
+}
+
+ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* ------------------------------------------------------------------ FOCUS */
+/* One global treatment. Never removed, never colour-only — it also offsets. */
+:focus-visible {
+  outline: var(--vs-focus-ring);
+  outline-offset: var(--vs-focus-offset);
+  border-radius: var(--vs-radius-sm);
+}
+
+/* --------------------------------------------------------------- A11Y ---- */
+.vs-visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+.vs-skip-link {
+  position: absolute;
+  top: var(--vs-space-2);
+  left: var(--vs-space-2);
+  z-index: 100;
+  padding: var(--vs-space-2) var(--vs-space-4);
+  background: var(--vs-panel);
+  border: 1px solid var(--vs-gold-edge);
+  color: var(--vs-parchment);
+  transform: translateY(-200%);
+  transition: transform var(--vs-dur-fast) var(--vs-ease);
+}
+
+.vs-skip-link:focus {
+  transform: translateY(0);
+}
+
+/* ----------------------------------------------------------- PRIMITIVES -- */
+
+/* Carved panel: layered surface, beveled corners, inset lip. */
+.vs-panel {
+  position: relative;
+  background:
+    linear-gradient(180deg, var(--vs-panel) 0%, var(--vs-surface) 100%);
+  border: 1px solid var(--vs-border);
+  box-shadow: var(--vs-shadow-panel), var(--vs-shadow-inset);
+  clip-path: var(--vs-clip-panel);
+}
+
+.vs-tile {
+  position: relative;
+  background: linear-gradient(180deg, var(--vs-panel) 0%, var(--vs-surface) 100%);
+  border: 1px solid var(--vs-border);
+  box-shadow: var(--vs-shadow-inset);
+  clip-path: var(--vs-clip-tile);
+}
+
+/* Engraved separator: a cut line with a light lip beneath. */
+.vs-rule {
+  height: 2px;
+  border: 0;
+  margin: 0;
+  background: linear-gradient(180deg, var(--vs-line) 0 1px, var(--vs-lip) 1px 2px);
+}
+
+/* Display heading: restrained serif, small caps, wide tracking. */
+.vs-display {
+  font-family: var(--vs-font-display);
+  font-variant-caps: all-small-caps;
+  letter-spacing: var(--vs-track-display);
+  font-weight: var(--vs-weight-bold);
+  color: var(--vs-parchment);
+  line-height: var(--vs-leading-tight);
+}
+
+/* Data: tabular figures so digits do not jitter on a 3s repaint. */
+.vs-data {
+  font-family: var(--vs-font-data);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: var(--vs-track-tight);
+}
+
+.vs-label {
+  font-family: var(--vs-font-ui);
+  font-size: var(--vs-text-2xs);
+  letter-spacing: var(--vs-track-wide);
+  text-transform: uppercase;
+  color: var(--vs-stone);
+}
+
+/* Four-corner gold bracket — original selection geometry (D-09). */
+.vs-brackets::before,
+.vs-brackets::after,
+.vs-brackets > .vs-brackets-b::before,
+.vs-brackets > .vs-brackets-b::after {
+  content: '';
+  position: absolute;
+  width: var(--vs-bracket-size);
+  height: var(--vs-bracket-size);
+  border: 0 solid var(--vs-bracket-color);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity var(--vs-dur-fast) var(--vs-ease-out);
+}
+
+.vs-brackets::before {
+  top: var(--vs-bracket-inset);
+  left: var(--vs-bracket-inset);
+  border-top-width: var(--vs-bracket-weight);
+  border-left-width: var(--vs-bracket-weight);
+}
+
+.vs-brackets::after {
+  top: var(--vs-bracket-inset);
+  right: var(--vs-bracket-inset);
+  border-top-width: var(--vs-bracket-weight);
+  border-right-width: var(--vs-bracket-weight);
+}
+
+.vs-brackets > .vs-brackets-b::before {
+  bottom: var(--vs-bracket-inset);
+  left: var(--vs-bracket-inset);
+  border-bottom-width: var(--vs-bracket-weight);
+  border-left-width: var(--vs-bracket-weight);
+}
+
+.vs-brackets > .vs-brackets-b::after {
+  bottom: var(--vs-bracket-inset);
+  right: var(--vs-bracket-inset);
+  border-bottom-width: var(--vs-bracket-weight);
+  border-right-width: var(--vs-bracket-weight);
+}
+
+.vs-brackets[data-selected='true']::before,
+.vs-brackets[data-selected='true']::after,
+.vs-brackets[data-selected='true'] > .vs-brackets-b::before,
+.vs-brackets[data-selected='true'] > .vs-brackets-b::after {
+  opacity: 1;
+}
+
+/* Status dot. Pulse is low-amplitude and reduced-motion aware. */
+.vs-dot {
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: currentColor;
+  flex: none;
+}
+
+.vs-dot[data-pulse='true'] {
+  animation: vs-pulse 2s var(--vs-ease) infinite;
+}
+
+@keyframes vs-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.45; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .vs-dot[data-pulse='true'] {
+    animation: none;
+  }
+}
+
+/**
+ * Masked value. Structure is preserved; only the value is obscured (D-06).
+ * Never an overlay, never a giant padlock.
+ */
+.vs-masked {
+  color: var(--vs-stone);
+  opacity: 0.55;
+  letter-spacing: 0.06em;
+  user-select: none;
+}
+
+/* Data-change illumination: one restrained cyan wash, then gone. */
+.vs-tick {
+  animation: vs-tick var(--vs-dur-slow) var(--vs-ease-out);
+}
+
+@keyframes vs-tick {
+  from { background-color: var(--vs-navi-dim); }
+  to { background-color: transparent; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .vs-tick {
+    animation: none;
+  }
+}
+
+/* Value polarity. Sign and caret carry the meaning; colour reinforces it. */
+.vs-pos { color: var(--vs-positive); }
+.vs-neg { color: var(--vs-negative); }

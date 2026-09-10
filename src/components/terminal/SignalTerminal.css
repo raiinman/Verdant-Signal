@@ -1,0 +1,484 @@
+.vs-terminal {
+  padding: var(--vs-space-4) 0 0;
+  min-width: 0;
+}
+
+.vs-terminal__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--vs-space-3);
+  padding: 0 var(--vs-space-5) var(--vs-space-3);
+}
+
+.vs-terminal__title {
+  font-size: var(--vs-text-lg);
+}
+
+.vs-terminal__count {
+  font-size: var(--vs-text-2xs);
+  color: var(--vs-stone);
+  letter-spacing: var(--vs-track-wide);
+}
+
+/* ------------------------------------------------------------- table ----- */
+.vs-terminal__tablewrap {
+  overflow-x: auto;
+}
+
+.vs-terminal__table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--vs-text-xs);
+  /* Fixed layout so the PAIR cell cannot absorb the whole row and strand the
+     numeric columns against the right edge (V-02). */
+  table-layout: fixed;
+}
+
+/* Column proportions: identity wide enough for the locked placeholder names,
+   numerics equal so digits align down the grid. */
+/* Widths sum to exactly 100. The identity column is sized for the longest
+   locked placeholder ("FREE COMMUNITY SETUP #1" + its leverage tag), which is
+   wider than any real ticker. */
+.vs-terminal__table col.vs-col-pair { width: 29%; }
+.vs-terminal__table col.vs-col-side { width: 5%; }
+.vs-terminal__table col.vs-col-num { width: 9%; }
+.vs-terminal__table col.vs-col-roe { width: 10%; }
+.vs-terminal__table col.vs-col-status { width: 12%; }
+.vs-terminal__table col.vs-col-action { width: 8%; }
+
+.vs-terminal__table thead th {
+  position: sticky;
+  top: 0;
+  padding: var(--vs-space-3) var(--vs-space-3);
+  text-align: right;
+  font-size: var(--vs-text-2xs);
+  font-weight: var(--vs-weight-medium);
+  white-space: nowrap;
+  background: var(--vs-surface);
+  border-bottom: 1px solid var(--vs-border);
+}
+
+.vs-terminal__table thead th:first-child {
+  text-align: left;
+  padding-left: var(--vs-space-5);
+}
+
+.vs-terminal__table tbody td {
+  padding: var(--vs-space-3);
+  text-align: right;
+  white-space: nowrap;
+  border-bottom: 1px solid var(--vs-border-hair);
+}
+
+.vs-terminal__table tbody td:first-child {
+  text-align: left;
+  padding-left: var(--vs-space-5);
+}
+
+/* Row as a selectable equipment object. */
+.vs-terminal__row {
+  position: relative;
+  cursor: pointer;
+  transition: background-color var(--vs-dur-fast) var(--vs-ease);
+}
+
+.vs-terminal__row:hover {
+  background: var(--vs-navi-dim);
+}
+
+.vs-terminal__row:focus-visible {
+  outline: var(--vs-focus-ring);
+  outline-offset: calc(var(--vs-focus-offset) * -1);
+}
+
+.vs-terminal__row[data-selected='true'] {
+  background: var(--vs-gold-dim);
+}
+
+.vs-terminal__row[data-empty='true'] {
+  cursor: default;
+}
+
+.vs-terminal__row[data-empty='true']:hover {
+  background: none;
+}
+
+/* Locked rows keep full structure — only values dim. No overlay. */
+.vs-terminal__row[data-locked='true'] .vs-terminal__symbol {
+  color: var(--vs-stone);
+}
+
+.vs-terminal__pair {
+  display: flex;
+  align-items: center;
+  gap: var(--vs-space-2);
+  min-width: 0;
+}
+
+.vs-terminal__lock {
+  color: var(--vs-locked);
+  font-size: 9px;
+  line-height: 1;
+  flex: none;
+}
+
+.vs-terminal__symbol {
+  font-weight: var(--vs-weight-bold);
+  letter-spacing: var(--vs-track-tight);
+  color: var(--vs-parchment);
+}
+
+.vs-terminal__lev {
+  font-family: var(--vs-font-data);
+  font-size: 10px;
+  letter-spacing: var(--vs-track-tight);
+  color: var(--vs-stone);
+  opacity: 0.8;
+  white-space: nowrap;
+}
+
+/* The symbol yields before the leverage tag does, so the tag is never clipped
+   into an unreadable fragment (V-07). */
+.vs-terminal__symbol {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Side badge: letter carries meaning; colour reinforces. */
+.vs-terminal__side {
+  display: inline-block;
+  min-width: 18px;
+  padding: 1px 5px;
+  text-align: center;
+  font-weight: var(--vs-weight-bold);
+  clip-path: var(--vs-clip-tile);
+}
+
+.vs-terminal__side[data-side='B'] {
+  background: var(--vs-emerald-dim);
+  color: var(--vs-emerald);
+  border: 1px solid var(--vs-emerald-edge);
+}
+
+.vs-terminal__side[data-side='S'] {
+  background: var(--vs-danger-dim);
+  color: var(--vs-critical);
+  border: 1px solid var(--vs-danger-edge);
+}
+
+/* Mark price is the cell that moves — restrained cyan, no flashing. */
+.vs-terminal__mark {
+  color: var(--vs-navi);
+}
+
+.vs-terminal__roe {
+  font-weight: var(--vs-weight-bold);
+}
+
+/**
+ * Suppressed substitutions. When a locked VIP slot is losing, the reference
+ * prints 'ACTIVE RANGE' / 'SL Guarded' in place of the number. These are
+ * placeholders, not values, so they must not out-shout the real RoE figures
+ * around them (V-03).
+ */
+.vs-terminal__roe[data-suppressed='true'],
+.vs-slotcard__roe[data-suppressed='true'],
+.vs-slotcard__pnl[data-suppressed='true'] {
+  font-weight: var(--vs-weight-normal);
+  font-size: var(--vs-text-2xs);
+  letter-spacing: var(--vs-track-wide);
+  color: var(--vs-stone);
+}
+
+.vs-terminal__caret {
+  margin-right: 3px;
+  font-size: 9px;
+}
+
+/* Status badges. Emerald = healthy, cyan = protected/active, gold = warning. */
+.vs-terminal__badge {
+  display: inline-block;
+  padding: 2px var(--vs-space-2);
+  font-family: var(--vs-font-data);
+  font-size: 10px;
+  letter-spacing: var(--vs-track-tight);
+  white-space: nowrap;
+  clip-path: var(--vs-clip-tile);
+  border: 1px solid;
+}
+
+.vs-terminal__badge[data-kind='LOCKED_WIN'] {
+  color: var(--vs-emerald);
+  background: var(--vs-emerald-dim);
+  border-color: var(--vs-emerald-edge);
+}
+
+.vs-terminal__badge[data-kind='SL_PROTECTED'] {
+  color: var(--vs-navi);
+  background: var(--vs-navi-dim);
+  border-color: var(--vs-navi-edge);
+}
+
+.vs-terminal__badge[data-kind='ACCUMULATION'] {
+  color: var(--vs-stone);
+  background: var(--vs-stone-dim);
+  border-color: var(--vs-border);
+}
+
+.vs-terminal__badge[data-kind='NEAR_STOP'] {
+  color: var(--vs-gold-bright);
+  background: var(--vs-gold-dim);
+  border-color: var(--vs-gold-edge);
+}
+
+/* Action button — tactile, small depth, strong pressed state. */
+.vs-terminal__actioncell {
+  padding-right: var(--vs-space-5) !important;
+}
+
+.vs-terminal__action {
+  min-height: 26px;
+  padding: 3px var(--vs-space-3);
+  font-family: var(--vs-font-data);
+  font-size: 10px;
+  letter-spacing: var(--vs-track-wide);
+  clip-path: var(--vs-clip-tile);
+  border: 1px solid var(--vs-border-strong);
+  background: var(--vs-moss);
+  color: var(--vs-parchment);
+  box-shadow: inset 0 1px 0 rgba(232, 225, 200, 0.07);
+  transition:
+    transform var(--vs-dur-instant) var(--vs-ease),
+    border-color var(--vs-dur-instant) var(--vs-ease);
+}
+
+.vs-terminal__action:hover {
+  border-color: var(--vs-navi-edge);
+}
+
+.vs-terminal__action:active {
+  transform: translateY(1px);
+  box-shadow: var(--vs-press);
+}
+
+.vs-terminal__action[data-kind='UNLOCK_VIP'] {
+  border-color: var(--vs-gold-edge);
+  color: var(--vs-gold-bright);
+}
+
+.vs-terminal__emptyslot {
+  text-align: center !important;
+  padding: var(--vs-space-3) !important;
+  font-size: 10px;
+  letter-spacing: var(--vs-track-wide);
+  color: var(--vs-stone);
+  opacity: 0.4;
+}
+
+/* ------------------------------------------------------- detail pane ----- */
+.vs-terminal__detailrow td {
+  padding: 0 !important;
+  background: var(--vs-bg-deep);
+}
+
+.vs-detail {
+  padding: var(--vs-space-4) var(--vs-space-5);
+  border-left: var(--vs-bracket-weight) solid var(--vs-gold);
+}
+
+.vs-detail__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: var(--vs-space-3) var(--vs-space-4);
+  margin: 0;
+}
+
+.vs-detail__field {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.vs-detail__value {
+  margin: 0;
+  font-size: var(--vs-text-xs);
+  color: var(--vs-parchment);
+}
+
+.vs-detail__note {
+  margin-top: var(--vs-space-3);
+  font-size: 10px;
+  letter-spacing: var(--vs-track-tight);
+  color: var(--vs-stone);
+}
+
+/* ------------------------------------------------------------- states ---- */
+.vs-terminal__empty {
+  padding: var(--vs-space-10) var(--vs-space-5);
+  text-align: center;
+  font-size: var(--vs-text-xs);
+  letter-spacing: var(--vs-track-wide);
+  color: var(--vs-stone);
+}
+
+.vs-terminal__skeleton {
+  padding: var(--vs-space-3) var(--vs-space-5) var(--vs-space-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--vs-space-2);
+}
+
+.vs-terminal__skeletonrow {
+  height: 34px;
+  background: linear-gradient(90deg, var(--vs-surface) 0%, var(--vs-moss) 50%, var(--vs-surface) 100%);
+  opacity: 0.5;
+  clip-path: var(--vs-clip-tile);
+}
+
+/* ----------------------------------------------------- mobile cards ------ */
+.vs-terminal__cards {
+  display: none;
+}
+
+@media (max-width: 1023px) {
+  /* The eight-column table never ships below lg. */
+  .vs-terminal__tablewrap {
+    display: none;
+  }
+
+  .vs-terminal__cards {
+    display: flex;
+    flex-direction: column;
+    gap: var(--vs-space-2);
+    padding: var(--vs-space-3) var(--vs-space-3) var(--vs-space-4);
+  }
+}
+
+.vs-slotcard {
+  position: relative;
+  background: var(--vs-surface);
+  border: 1px solid var(--vs-border);
+  clip-path: var(--vs-clip-tile);
+  transition: border-color var(--vs-dur-fast) var(--vs-ease);
+}
+
+.vs-slotcard[data-selected='true'] {
+  border-color: var(--vs-gold-edge);
+  background: var(--vs-gold-dim);
+}
+
+.vs-slotcard__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--vs-space-3);
+  width: 100%;
+  min-height: var(--vs-touch-min);
+  padding: var(--vs-space-3);
+  text-align: left;
+}
+
+.vs-slotcard__ident {
+  display: flex;
+  align-items: center;
+  gap: var(--vs-space-2);
+  min-width: 0;
+}
+
+.vs-slotcard__symbol {
+  font-size: var(--vs-text-xs);
+  font-weight: var(--vs-weight-bold);
+  color: var(--vs-parchment);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.vs-slotcard__roe {
+  font-size: var(--vs-text-sm);
+  font-weight: var(--vs-weight-bold);
+  white-space: nowrap;
+}
+
+.vs-slotcard__meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--vs-space-2);
+  padding: 0 var(--vs-space-3) var(--vs-space-3);
+}
+
+.vs-slotcard__pnl {
+  font-size: var(--vs-text-xs);
+}
+
+.vs-slotcard__panel {
+  padding: var(--vs-space-3);
+  border-top: 1px solid var(--vs-border-hair);
+}
+
+.vs-slotcard__action {
+  width: 100%;
+  min-height: var(--vs-touch-min);
+  margin-top: var(--vs-space-3);
+  padding: var(--vs-space-2) var(--vs-space-3);
+  font-family: var(--vs-font-data);
+  font-size: var(--vs-text-2xs);
+  letter-spacing: var(--vs-track-wide);
+  clip-path: var(--vs-clip-tile);
+  border: 1px solid var(--vs-border-strong);
+  background: var(--vs-moss);
+  color: var(--vs-parchment);
+}
+
+.vs-slotcard__action:active {
+  box-shadow: var(--vs-press);
+}
+
+@media (max-width: 479px) {
+  .vs-terminal__head {
+    padding: 0 var(--vs-space-3) var(--vs-space-3);
+  }
+
+  /* Stop the title and the slot count wrapping into each other (V-05). */
+  .vs-terminal__title {
+    font-size: var(--vs-text-base);
+  }
+
+  .vs-terminal__count {
+    white-space: nowrap;
+    font-size: 10px;
+  }
+
+  /* The locked placeholder names are long; give identity the room and let the
+     leverage tag sit under it rather than wrapping mid-phrase (V-06). */
+  .vs-slotcard__head {
+    align-items: flex-start;
+  }
+
+  /* Wrap rather than stack, so the lock glyph stays inline with the symbol it
+     belongs to and only the leverage tag drops to its own line (V-08). */
+  .vs-slotcard__ident {
+    flex-wrap: wrap;
+    align-items: baseline;
+    row-gap: 2px;
+  }
+
+  .vs-slotcard__ident .vs-terminal__lev {
+    flex-basis: 100%;
+  }
+
+  .vs-slotcard__symbol {
+    white-space: normal;
+    overflow: visible;
+    line-height: 1.25;
+  }
+
+  .vs-detail__grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}

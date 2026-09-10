@@ -1,0 +1,77 @@
+.vs-shell {
+  max-width: var(--vs-content-max);
+  margin: 0 auto;
+  padding: 0 var(--vs-space-5) var(--vs-space-10);
+}
+
+/* 70 / 30. The reference measures 57.5 / 42.5 — the sales card nearly matched
+   the product. Here the terminal dominates (D-04). */
+.vs-shell__workstation {
+  display: grid;
+  grid-template-columns: var(--vs-layout-terminal) var(--vs-layout-rail);
+  gap: var(--vs-space-4);
+  align-items: start;
+  margin-bottom: var(--vs-space-4);
+}
+
+/* Below lg the rail moves beneath the terminal rather than being squeezed. */
+@media (max-width: 1023px) {
+  .vs-shell {
+    padding: 0 var(--vs-space-4) var(--vs-space-8);
+  }
+
+  .vs-shell__workstation {
+    grid-template-columns: 1fr;
+    gap: var(--vs-space-3);
+  }
+}
+
+@media (max-width: 767px) {
+  .vs-shell {
+    padding: 0 var(--vs-space-3) var(--vs-space-8);
+  }
+}
+
+/* ------------------------------------------------------------- footer ---- */
+.vs-footer {
+  margin-top: var(--vs-space-8);
+}
+
+.vs-footer__links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--vs-space-4);
+  padding: var(--vs-space-4) 0 var(--vs-space-3);
+}
+
+.vs-footer__links button {
+  min-height: 32px;
+  font-size: var(--vs-text-2xs);
+  letter-spacing: var(--vs-track-tight);
+  color: var(--vs-stone);
+  transition: color var(--vs-dur-fast) var(--vs-ease);
+}
+
+.vs-footer__links button:hover {
+  color: var(--vs-parchment);
+  text-decoration: underline;
+}
+
+/* Legal copy is preserved verbatim and kept readable — never shrunk to hide it. */
+.vs-footer__notice {
+  max-width: 100ch;
+  font-size: var(--vs-text-2xs);
+  line-height: 1.65;
+  color: var(--vs-stone);
+  opacity: 0.85;
+}
+
+@media (max-width: 767px) {
+  .vs-footer__links {
+    gap: var(--vs-space-3);
+  }
+
+  .vs-footer__links button {
+    min-height: var(--vs-touch-min);
+  }
+}

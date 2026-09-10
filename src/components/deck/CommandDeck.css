@@ -1,0 +1,139 @@
+.vs-deck {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--vs-space-4);
+  padding: var(--vs-space-5) 0 var(--vs-space-4);
+}
+
+.vs-deck__identity {
+  display: flex;
+  flex-direction: column;
+  gap: var(--vs-space-1);
+}
+
+.vs-deck__title {
+  font-size: var(--vs-text-2xl);
+  line-height: 1;
+}
+
+.vs-deck__subtitle {
+  font-size: var(--vs-text-2xs);
+  color: var(--vs-stone);
+}
+
+.vs-deck__indicators {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--vs-space-2);
+}
+
+.vs-deck__chip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--vs-space-2);
+  padding: var(--vs-space-1) var(--vs-space-3);
+  background: var(--vs-surface);
+  border: 1px solid var(--vs-border);
+  clip-path: var(--vs-clip-tile);
+  font-size: var(--vs-text-2xs);
+  letter-spacing: var(--vs-track-tight);
+  color: var(--vs-stone);
+  white-space: nowrap;
+}
+
+/* Navi cyan is reserved for live/streaming state. */
+.vs-deck__chip[data-tone='live'] {
+  color: var(--vs-navi);
+  border-color: var(--vs-navi-edge);
+  background: var(--vs-navi-dim);
+}
+
+.vs-deck__chip[data-tone='loading'] {
+  color: var(--vs-navi);
+  border-color: var(--vs-border);
+}
+
+.vs-deck__chip[data-tone='stale'] {
+  color: var(--vs-status-stale);
+  border-color: var(--vs-gold-edge);
+  background: var(--vs-gold-dim);
+}
+
+.vs-deck__chip[data-tone='down'] {
+  color: var(--vs-critical);
+  border-color: var(--vs-danger-edge);
+  background: var(--vs-danger-dim);
+}
+
+.vs-deck__retry {
+  min-height: 28px;
+  padding: var(--vs-space-1) var(--vs-space-3);
+  border: 1px solid var(--vs-danger-edge);
+  background: var(--vs-danger-dim);
+  color: var(--vs-critical);
+  clip-path: var(--vs-clip-tile);
+  font-family: var(--vs-font-data);
+  font-size: var(--vs-text-2xs);
+  letter-spacing: var(--vs-track-wide);
+}
+
+.vs-deck__retry:active {
+  box-shadow: var(--vs-press);
+}
+
+.vs-deck__link {
+  padding: var(--vs-space-1) var(--vs-space-2);
+  font-family: var(--vs-font-data);
+  font-size: var(--vs-text-2xs);
+  letter-spacing: var(--vs-track-tight);
+  color: var(--vs-navi);
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.vs-deck__link:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 1023px) {
+  .vs-deck {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: var(--vs-space-3);
+    padding: var(--vs-space-4) 0 var(--vs-space-3);
+  }
+
+  .vs-deck__title {
+    font-size: var(--vs-text-xl);
+  }
+}
+
+/* On a phone the indicator row scrolls horizontally rather than wrapping to
+   four lines and pushing the terminal below the fold. */
+@media (max-width: 767px) {
+  .vs-deck__indicators {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    scroll-snap-type: x proximity;
+    width: 100%;
+    padding-bottom: var(--vs-space-2);
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+
+  .vs-deck__indicators::-webkit-scrollbar {
+    display: none;
+  }
+
+  .vs-deck__chip {
+    scroll-snap-align: start;
+    flex: none;
+  }
+
+  .vs-deck__link {
+    flex: none;
+  }
+}

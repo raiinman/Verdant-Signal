@@ -73,10 +73,73 @@ are not defects in our code; they are the conditions being redesigned away.
 
 ---
 
-## Pass 1 — implementation, slice 1 (2026-09-10)
+## Pass 1 — implementation defects found and fixed (2026-09-10)
 
-Captured after building the global shell, command deck, terminal, status rail, verified-exit
-strip and responsive transformation. Compared against the reference captures at identical sizes.
+Eight defects found by inspecting the first implementation capture against the reference at
+identical viewports. All eight were fixed and re-captured before commit.
+
+### V-01 · Roadmap rendered browser list markers
+- **Viewport:** 1024–1920
+- **Expected:** Stage sequence carried by the ◆ / ◇ glyph alone.
+- **Observed:** `1.` `2.` `3.` from the `<ol>` default list-style — the base reset covered `ul` but not `ol`.
+- **Fix:** `list-style: none` + margin/padding reset on `.vs-rail__stages`.
+- **Status:** ✅ Fixed.
+
+### V-02 · Identity column absorbed the row
+- **Viewport:** 1440×900, 1920×1080
+- **Expected:** Numeric columns evenly spaced and aligned down the grid.
+- **Observed:** `PAIR` consumed the free space, stranding ENTRY…STATUS against the right edge with a wide dead gap.
+- **Fix:** `table-layout: fixed` plus an explicit `<colgroup>`.
+- **Status:** ✅ Fixed.
+
+### V-03 · Suppressed placeholders out-shouted real values
+- **Viewport:** all
+- **Expected:** `ACTIVE RANGE` / `SL GUARDED` read as absent data, not as figures.
+- **Observed:** Rendered in bold parchment at full RoE size, drawing *more* attention than the real percentages beside them — the opposite of the intent, since these mark a value the reference deliberately withholds.
+- **Fix:** `data-suppressed` styling — normal weight, smaller, muted stone.
+- **Status:** ✅ Fixed.
+
+### V-04 · Connection state collapsed to a bare dot
+- **Viewport:** 375×812
+- **Expected:** Connection state legible on a phone.
+- **Observed:** Below 480px the label was hidden entirely, leaving an unlabelled dot beside `GET VIP` that communicated nothing.
+- **Fix:** A compact label (`CONNECT` / `FREE` / `VIP`) replaces the full one instead of hiding it.
+- **Status:** ✅ Fixed.
+
+### V-05 · Terminal heading and slot count collided
+- **Viewport:** 375×812
+- **Expected:** One line each.
+- **Observed:** "ACTIVE ALPHA SIGNALS" wrapped to two lines and "9 ACTIVE · 1 OPEN" broke mid-phrase.
+- **Fix:** Step the title down one scale rung below 480px; `white-space: nowrap` on the count.
+- **Status:** ✅ Fixed.
+
+### V-06 · Locked placeholder names truncated on mobile
+- **Viewport:** 375×812
+- **Expected:** Slot identity fully readable.
+- **Observed:** "FREE COMMUNITY SETUP…" ellipsised and "10X ALGO" wrapped mid-tag.
+- **Fix:** Identity wraps below 480px; the leverage tag takes its own line.
+- **Status:** ✅ Fixed.
+
+### V-07 · Leverage tag clipped in the table
+- **Viewport:** 1440×900
+- **Expected:** `10X ALGO` intact.
+- **Observed:** Rendered `10X ALGO__` — the colgroup widths summed to 102%, squeezing the identity cell.
+- **Fix:** Widths corrected to sum to exactly 100; the symbol ellipsises before the tag does.
+- **Status:** ✅ Fixed.
+
+### V-08 · Lock glyph orphaned onto its own line
+- **Viewport:** 375×812
+- **Expected:** Lock inline with the symbol it qualifies.
+- **Observed:** The V-06 fix stacked the identity as a column, pushing the glyph onto a line by itself.
+- **Fix:** Wrap instead of stack; only the leverage tag gets `flex-basis: 100%`.
+- **Status:** ✅ Fixed.
+
+---
+
+## Pass 1 — verification (2026-09-10)
+
+Re-captured after the eight fixes. Compared against the reference captures at identical sizes.
+Automated coverage: `npm test` — 10 Playwright checks, all passing.
 
 ### I-01 · Horizontal overflow — none
 - **Viewport:** all six
@@ -88,7 +151,20 @@ strip and responsive transformation. Compared against the reference captures at 
 ### I-02 · Document height vs reference
 - **Viewport:** all six
 - **Expected:** Substantially shorter than the reference; terminal above the fold.
-- **Observed:** See `reference/screens/implementation/manifest.json` for measured heights against the reference's 3,189 / 4,733.
+- **Observed:**
+
+| Viewport | Reference | Implementation | Change |
+|---|---:|---:|---:|
+| 375 × 812 | 4,733 px | 2,165 px | **−54%** |
+| 430 × 932 | 4,582 px | 2,073 px | **−55%** |
+| 768 × 1024 | 4,225 px | 2,133 px | **−50%** |
+| 1024 × 768 | 3,189 px | 1,333 px | **−58%** |
+| 1440 × 900 | 3,189 px | 1,290 px | **−60%** |
+| 1920 × 1080 | 3,189 px | 1,290 px | **−60%** |
+
+  At 1440 and above, the command deck, all nine slots, the open-slot remainder, the full status
+  rail with roadmap, and the five verified exits all sit within the first viewport. The reference
+  showed one signal card in the same space.
 - **Fix:** n/a — density is the intended gain.
 - **Status:** ✅ Pass.
 
