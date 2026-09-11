@@ -3,108 +3,175 @@
 **Date:** 2026-09-10  
 **Current branch:** `feature/zenom-reverse-engineering`
 
-## Read first
+## Read first — current authority
 
-Current project authority is captured in:
+Before making architectural decisions, read these in order:
 
 1. `docs/VERDANT_PROJECT_DIRECTION_2026-09-10.md`
 2. `docs/VERDANT_PERCEPTION_ENGINE_FOUNDATION_2026-09-10.md`
+3. `docs/VERDANT_TRADE_GEOMETRY_AND_MODEL_RESEARCH_2026-09-10.md`
 
-Do not proceed from chat memory alone. Read both files before making architectural decisions.
+Do not proceed from chat memory alone.
 
-The Perception Engine Foundation is additive authority created after the project-direction document and captures the mathematical decision architecture, historical-pattern approach, validation philosophy, explainability requirements, and ADHD-first output rules reached in the subsequent design discussion.
+The second and third files are additive authority created after the project-direction pivot. Together they capture the mathematical decision architecture, historical-pattern approach, validation philosophy, model-research strategy, trade geometry, explainability requirements, and ADHD-first output rules.
 
-## Current state
+---
 
-- Repository baseline exists on `main`.
-- Feature branch exists and is the active development lane.
-- Zenom Alpha was originally being treated mainly as a reverse-engineering/redesign target.
-- The project direction has now been corrected: Verdant Signal should not merely reproduce a dashboard. It should build a real quantitative market-observation and signal engine underneath the UI.
-- Webot US is the current exchange constraint, not Binance.
-- Current assumption from official Webot US API material: spot-oriented execution semantics, so Verdant must not casually inherit futures/leverage/short assumptions from Zenom.
-- Initial execution mode is PAPER ONLY.
+# Current project thesis
 
-## Core architecture now
+Verdant Signal is **not** a Zenom Alpha clone and must not treat Zenom marketing claims as evidence.
 
-The missing system is the **Verdant Perception Engine**.
+- Zenom Alpha is a product/workflow/UI reference.
+- Ocarina-of-Time-inspired atmosphere remains the frontend design language without copying Nintendo assets.
+- Webot US is the current venue constraint.
+- Current venue assumptions are spot-first: do not silently introduce futures leverage, liquidation, or executable short semantics.
+- Initial execution mode is **PAPER ONLY**.
+- The real product is the **Verdant Perception Engine**.
 
-Its north-star workflow is:
+North star:
 
 > **Observe -> Compare -> Calculate -> Decide -> Verify**
 
-Its job:
-
-1. ingest historical and live market data;
-2. freeze the information actually available at decision time;
-3. convert raw data into normalized mathematical observations;
-4. calculate specialist evidence such as trend, momentum, structure, participation, liquidity, volatility, and risk;
-5. identify market regime/context;
-6. compare the current normalized state against mathematically similar historical states;
-7. calculate score, expectancy, and uncertainty;
-8. produce explainable BUY / WAIT / EXIT decisions;
-9. apply hard risk/data-quality vetoes where appropriate;
-10. paper-execute with realistic costs;
-11. journal every signal and result immutably;
-12. evaluate whether the approach actually has positive expectancy;
-13. forward-paper-test promising models before any live-money consideration.
-
-The intended eventual user interaction is as simple as:
+The intended eventual interaction is:
 
 > **"Verdant, look at Solana."**
 
-Verdant should then perform the mathematics underneath and return a concise call plus an optional **Show the Math** breakdown.
+Verdant should then perform the mathematics underneath and return a concise human-readable call plus an optional `SHOW THE MATH` derivation.
 
-## Important design philosophy
+---
 
-Do not begin with opaque machine learning.
+# Core system architecture
 
-Start with a transparent mathematical rules/scoring engine whose decisions can be reproduced and audited. Statistical calibration and ML are later layers if the accumulated data justifies them.
+Keep these systems conceptually separate:
 
-Every mathematical input must have an explicit definition. Every weight, threshold, penalty, veto, and output must be inspectable.
+```text
+PerceptionEngine(MarketFrame) -> MarketAssessment
+StrategyEngine(MarketAssessment, PortfolioState) -> BUY | WAIT | EXIT
+TradeGeometry(MarketAssessment, StrategyState) -> Entry / Stop / Targets / Size
+PaperExecution(Decision, Geometry, MarketState) -> SimulatedFills
+Evaluation(Signals, Fills, Outcomes) -> PerformanceEvidence
+```
 
-Related indicators must not create fake consensus merely because the same phenomenon was measured several ways. Group correlated evidence into specialist "eyes" and measure incremental value.
+This separation is important so a failure can be diagnosed as:
 
-Features are hypotheses, not sacred indicators. Every feature must be removable and must earn its place through out-of-sample evidence.
+- perception failure;
+- threshold/model failure;
+- regime failure;
+- trade-geometry failure;
+- position-sizing failure;
+- execution-cost/liquidity failure;
+- data-quality failure.
 
-Maintain a future **Feature Graveyard** recording rejected, provisional, and accepted features with reasons so failed ideas are not repeatedly rediscovered.
+Do not combine all of those into one opaque model.
 
-## Mathematical direction
+---
 
-Conceptually, Verdant observes a state vector:
+# Mathematical direction
+
+At each decision timestamp, freeze an immutable past-only market state:
 
 ```text
 X_t = [Trend, Momentum, Structure, Participation, Liquidity,
-       VolatilityRisk, ResistanceRisk, ...]
+       Volatility, Overextension, RegimeContext, ...]
 ```
 
-A first transparent model may take the general form:
+Every input must have an explicit mathematical definition.
+
+Raw values must be normalized using past-only information before they can be combined.
+
+Candidate mathematical tools depend on the question:
+
+- measurement -> returns, slopes, volatility, range, volume, spread, liquidity, structure distances;
+- normalization -> robust rolling statistics / percentiles / other past-only transforms;
+- similarity -> explicit distance between normalized market states;
+- prediction -> transparent probability/statistical models;
+- profitability -> expectancy after realistic costs;
+- uncertainty -> outcome distributions, calibration, resampling;
+- redundancy -> correlation/covariance/incremental-value tests;
+- feature selection -> ablation and regularization;
+- regime detection -> transparent classification/clustering if justified;
+- validation -> chronological OOS, walk-forward, untouched holdout, forward paper.
+
+Locked principle:
+
+> **The question determines the mathematical toolbox; history and forward evidence determine which candidate survives.**
+
+---
+
+# Historical pattern authority
+
+History is Verdant's laboratory.
+
+For each past state, preserve:
 
 ```text
-VerdantScore = sum(supporting weighted evidence)
-               - sum(weighted penalties)
+X_t -> Y_t
 ```
 
-The exact weights and thresholds are NOT authority yet.
-
-Raw observations must be normalized using past-only information before combination. A robust rolling median/MAD transform is one candidate, but the final normalization scheme is research work.
-
-Longer term, the score should account for regime:
+The central question is:
 
 ```text
-VerdantScore = f(CurrentMarketState, CurrentRegime)
+P(Y | X)
 ```
 
-Historical analogue comparison should ask:
+Plain English:
 
 > Given what the market looks like right now, what historically tended to happen next?
 
-Current and historical normalized states can be compared with an explicit distance/similarity function, then evaluated against the distribution of subsequent outcomes.
+A historical-analogue model should be tested using an explicit similarity/distance function between normalized market-state vectors.
 
-## Expectancy authority
+Verdant should be able to report:
 
-Win rate alone is not the target.
+- comparable historical-state count;
+- positive/negative outcome frequency;
+- median forward return;
+- target-before-stop frequency;
+- MAE / MFE distributions;
+- expected value after costs;
+- uncertainty / dispersion;
+- performance by asset / regime / timeframe.
 
-Verdant ultimately cares about positive expectancy after costs:
+Similarity is evidence, not proof that history must repeat.
+
+---
+
+# Candidate model tournament
+
+Do not assume a single mathematical model is correct.
+
+Initial candidates should include at least:
+
+1. transparent weighted scoring;
+2. logistic regression;
+3. historical nearest-neighbor / analogue comparison.
+
+Compare all candidates using the same underlying data, outcome definitions, and execution assumptions.
+
+Evaluate more than peak return:
+
+- out-of-sample expectancy;
+- drawdown;
+- calibration;
+- stability across time;
+- stability across assets/regimes;
+- parameter sensitivity;
+- complexity;
+- explainability;
+- forward-paper performance.
+
+A simpler stable model may be preferred over a more profitable-looking but fragile one.
+
+Preserve model disagreement. Strong disagreement may itself justify `WAIT`.
+
+Do not use decorative confidence percentages.
+
+---
+
+# Expectancy authority
+
+Win rate alone is not the goal.
+
+Core value equation:
 
 ```text
 Expectancy = P(win) * AverageWin
@@ -112,55 +179,139 @@ Expectancy = P(win) * AverageWin
              - TradingCosts
 ```
 
-The engine can be wrong on many individual calls and still be useful if the long-run expectancy is positive and drawdown/risk remain acceptable.
+Trading costs include realistic fees, spread, slippage, and other relevant execution friction.
 
-## Perception / strategy separation
+Verdant can be wrong on many individual calls and still be useful if expectancy remains positive and risk/drawdown are acceptable.
 
-Keep these conceptual systems separate:
+---
+
+# Complete call authority — mathematical trade geometry
+
+A useful Verdant call must eventually produce more than direction.
+
+For a valid setup, calculate and explain:
+
+- `BUY / WAIT / EXIT`;
+- entry zone;
+- maximum acceptable entry / do-not-chase price;
+- stop-loss;
+- target 1 / target 2 where justified;
+- expected upside/downside;
+- risk/reward;
+- position size under a defined paper account-risk policy;
+- early/thesis-invalidated exit conditions;
+- trailing-stop behavior if validated;
+- maximum holding period when relevant.
+
+Every number must come from an explicit equation, historically justified policy, or validated rule.
+
+No arbitrary `$145 looks about right` behavior.
+
+---
+
+# Stop / target research
+
+A volatility-scaled baseline may be tested:
 
 ```text
-PerceptionEngine(MarketFrame) -> MarketAssessment
-StrategyEngine(MarketAssessment, PortfolioState) -> BUY | WAIT | EXIT
-PaperExecution(Decision, MarketState) -> SimulatedFills
-Evaluation(Signals, Fills, Outcomes) -> PerformanceEvidence
+Stop = Entry - k_stop * ATR
+Target = Entry + k_target * ATR
 ```
 
-This separation is important so failures can be diagnosed as perception, threshold, trade-policy, sizing, regime, or execution-cost failures instead of disappearing inside one black box.
+This is a baseline only, not final authority.
 
-## Evaluation authority
+More important, Verdant must record:
 
-Every signal must be recorded, including losses, WAITs, rejected signals, and risk vetoes when useful for research.
+- **MAE — Maximum Adverse Excursion**
+- **MFE — Maximum Favorable Excursion**
 
-Track realistic execution costs and performance metrics such as:
+Use MAE/MFE distributions from comparable historical setups to research:
 
-- fees
-- spread
-- slippage
-- win rate
-- average win/loss
-- profit factor
-- expectancy
-- account return
-- maximum drawdown
-- consecutive losses
-- performance by regime / asset / timeframe
-- historical analogue count
-- uncertainty / outcome distribution
-- calibration quality once probability-like confidence exists
+- how much adverse movement winning setups normally survive;
+- where stops sit inside ordinary noise;
+- realistic target distances;
+- differences by setup / asset / regime.
 
-Keep position return and account return separate.
+Stop and target geometry should ultimately compete mathematically rather than be chosen by intuition.
 
-Avoid look-ahead bias, leakage, unrealistic fills, cherry-picking, and overfitting.
+---
 
-Use chronological development/tuning/validation, walk-forward testing, and a genuinely untouched final holdout. Once a holdout is inspected, it is burned and must not later be described as untouched.
+# Entry-zone authority
 
-Backtesting must be followed by forward paper trading on live data before any future live-money decision.
+Prefer an acceptable execution range to fake single-price precision.
 
-The project position is that poor modeling should be attacked with stronger mathematics and experimental controls, not hand-waving.
+Research:
 
-## Immutable research records
+```text
+EV(price) = expected value if entered at that price
+```
 
-Verdant must never rewrite what it "saw" after learning the result.
+As entry gets worse, expectancy should be recalculated.
+
+This creates a defensible maximum acceptable entry and a plain-English output such as:
+
+> **Do not chase above X.**
+
+---
+
+# Position sizing authority
+
+Signal quality and account-risk policy are separate.
+
+Transparent paper baseline:
+
+```text
+AccountRisk = AccountValue * RiskFraction
+PositionSize = AccountRisk / abs(Entry - Stop)
+```
+
+Wider stop -> smaller position.
+
+Narrower stop -> potentially larger position.
+
+Account risk remains bounded, subject to liquidity, venue minimums, precision, and concentration constraints.
+
+The actual paper `RiskFraction` is unresolved and must be explicitly defined rather than assumed.
+
+---
+
+# EXIT authority
+
+EXIT should not mean only target-hit or stop-hit.
+
+Verdant should distinguish:
+
+- stop-loss exit;
+- take-profit exit;
+- thesis-invalidated exit;
+- maximum-hold exit;
+- data-quality / emergency exit.
+
+Candidate thesis-deterioration rules may include score falling below an exit threshold or remaining below that threshold for `N` consecutive observations.
+
+Any trailing-stop policy must be explicit and validated.
+
+---
+
+# Spot-first strategy state machine
+
+Under current Webot US authority:
+
+```text
+WAIT / FLAT
+    -> BUY
+    -> HOLD
+    -> TAKE PROFIT / EXIT / STOP-LOSS
+    -> WAIT / FLAT
+```
+
+Do not silently add leveraged short/futures semantics.
+
+---
+
+# Immutable research records
+
+Verdant must never rewrite what it saw after learning the result.
 
 Conceptual record sequence:
 
@@ -169,117 +320,198 @@ MarketFrame
 FeatureVector
 MarketAssessment
 Decision
+TradeGeometry
 PaperOrder / Fill
 Outcome
 ```
 
-The future outcome is appended later; it must never mutate the earlier perception or decision record.
+Every record needs timestamps and stable IDs.
 
-## Output authority — average-Joe first
+The future `Outcome` is appended later and must never mutate the earlier perception/decision/geometry record.
 
-The mathematical engine may be sophisticated. The default answer must be readable in seconds.
+Every signal, loss, WAIT, rejection, veto, exit reason, and meaningful failure should remain research evidence.
 
-Default output should consistently answer:
+---
 
-1. **What is the call?** — BUY / WAIT / EXIT
-2. **How strong is it?** — Weak / Moderate / Strong
-3. **Why?** — concise plain-English reasons
-4. **What is the main risk?** — concise conflicting evidence
-5. **What does history say?** — comparable setups, observed performance, expectancy/downside as justified
-6. **What is the next action?** — one obvious action
+# Validation authority
 
-Then expose:
+Fight bad modeling with stronger mathematics and experimental controls.
 
-> **[ SHOW THE MATH ]**
+At minimum defend against:
 
-The expanded view shows specialist scores, penalties, threshold, historical matches, expectancy, and the exact mathematical evidence.
+- look-ahead bias;
+- leakage;
+- full-dataset normalization;
+- cherry-picked periods;
+- duplicated/correlated indicators creating fake consensus;
+- unrealistic fills;
+- ignored spread/fees/slippage;
+- threshold cherry-picking;
+- repeated tuning on the same evaluation data;
+- fragile optimized weights;
+- unresolved intrabar stop/target ordering;
+- tiny analogue sample sizes;
+- misleading probability/confidence labels.
+
+Use:
+
+1. historical exploration;
+2. development/tuning;
+3. chronological out-of-sample testing;
+4. walk-forward validation;
+5. final untouched holdout;
+6. live forward paper trading;
+7. only then a separate future live-execution decision.
+
+Once a final holdout has been inspected, it is burned and may never again be described as untouched.
+
+---
+
+# Feature Graveyard / research memory
+
+Maintain durable research status for features, equations, interactions, and policies:
+
+```text
+ACCEPTED
+PROVISIONAL
+REJECTED
+```
+
+Record why.
+
+Verdant should learn from false BUYs, bad EXITs, bad stops, missed moves, liquidity failures, and rejected ideas.
+
+Research loop:
+
+```text
+Prediction -> Outcome -> Error analysis -> Hypothesis -> Test -> Keep/Reject
+```
+
+Negative results are valuable project knowledge.
+
+---
+
+# Average-Joe + ADHD-first output authority
 
 Locked principle:
 
 > **Simple answer. Deep proof.**
 
-## ADHD-first UX authority
+Default view should be understandable in seconds and keep important information in fixed positions.
 
-Verdant is intentionally designed for an ADHD brain.
+A complete call should answer:
 
-This is a product requirement, not merely a visual theme.
+1. What is the call?
+2. How strong is it?
+3. Where can I enter?
+4. What is the do-not-chase price?
+5. Where is the stop / where are we wrong?
+6. Where are the targets?
+7. How risky is it?
+8. What does history say?
+9. What is the one main warning?
+10. What is the next action?
 
-Hard rules:
+Example structure only:
+
+```text
+SOLANA
+
+CALL: BUY
+Strength: Strong
+Risk: Medium
+
+Entry:
+$149.80 - $151.10
+
+Do not chase above:
+$152.20
+
+Stop:
+$146.40
+
+Target 1:
+$156.70
+
+Target 2:
+$161.30
+
+Risk / Reward:
+1 : 2.1
+
+Historical setup:
+63% positive
+Expected value after costs: +0.48%
+
+Main risk:
+High volatility
+
+[ SHOW THE MATH ]
+```
+
+All values above are illustrative, not tested facts.
+
+`SHOW THE MATH` should reveal the raw measurements, normalized features, specialist evidence, regime, model outputs, historical analogue count, probability/outcome distribution, expectancy, MAE/MFE, entry derivation, stop/target derivation, size calculation, risk vetoes, model disagreement, and timestamps.
+
+ADHD-first remains a product requirement:
 
 - one dominant decision per screen;
-- critical answer understandable at a glance;
-- no giant text walls by default;
-- fixed placement for recurring information;
+- no dense text wall by default;
+- plain language first;
+- technical proof one action away;
+- fixed information placement;
 - strong visual hierarchy;
-- plain language first, technical detail second;
-- progressive disclosure;
-- immediate feedback and visible state/progress cues;
+- immediate state/feedback cues;
 - one obvious next action;
-- decorative styling must guide attention rather than compete with the signal;
-- mobile intentionally redesigned rather than shrunk;
-- users should not need to remember where important information lives.
+- decorative Ocarina-inspired styling must guide attention rather than compete with the decision.
 
-Locked principle:
+---
 
-> **Verdant should be understandable at a glance, explorable in depth, and never require the user to remember where the important information lives.**
+# Immediate next task — DO NOT SKIP
 
-## Immediate next task — DO THIS BEFORE CODING THE ENGINE
+Before substantial engine coding, create:
 
-Formalize `docs/VERDANT_RESEARCH_CONTRACT_V0.md`.
+`docs/VERDANT_RESEARCH_CONTRACT_V0.md`
 
-That contract must explicitly lock or define the research protocol for:
+The contract must explicitly define at least:
 
 1. decision cadence / primary timeframe;
 2. higher-timeframe context;
-3. information allowed at each decision timestamp;
+3. exact information allowed at each decision timestamp;
 4. canonical initial feature families;
-5. exact normalization method;
-6. initial regime definitions;
-7. exact definition of a successful future outcome;
-8. target / stop / maximum-hold methodology;
-9. realistic fill assumptions;
-10. fee / spread / slippage assumptions;
-11. train / tune / validation / holdout chronology;
-12. minimum historical sample requirements;
-13. historical-analogue similarity metric;
-14. threshold-selection protocol;
-15. feature acceptance / rejection / ablation protocol;
-16. forward-paper validation requirements;
-17. simple-output and Show-the-Math reporting schema.
+5. candidate baseline measurement equations;
+6. exact normalization method;
+7. initial regime definitions;
+8. exact successful-outcome label(s);
+9. candidate-model tournament and comparison metrics;
+10. historical analogue distance / neighbor protocol;
+11. minimum analogue sample requirements;
+12. MAE / MFE measurement protocol;
+13. baseline stop-policy candidates;
+14. baseline target-policy candidates;
+15. entry-zone / maximum-acceptable-entry methodology;
+16. position-sizing policy for paper mode;
+17. thesis-deterioration EXIT candidates;
+18. trailing-stop candidate(s);
+19. maximum-hold policy;
+20. realistic fill assumptions;
+21. fee / spread / slippage assumptions;
+22. intrabar tie-breaking when stop and target are both touched but event order is unknown;
+23. train / tune / validation / holdout chronology;
+24. threshold-selection protocol;
+25. feature acceptance / rejection / ablation protocol;
+26. model-disagreement handling;
+27. distinction among raw score, empirical probability, expectancy, strength, and risk;
+28. forward-paper validation requirements;
+29. simple-output schema;
+30. `SHOW THE MATH` derivation schema.
 
-Do not treat any illustrative equation weights, score thresholds, win rates, or confidence percentages from prior discussion as tested facts.
+Do not treat illustrative weights, thresholds, prices, win rates, ATR multipliers, risk fractions, or confidence values from conversation examples as tested facts.
 
-After the research contract is explicit, continue with:
+After the research contract is explicit, proceed to market-data/API work and implementation.
 
-1. verify Webot public API capabilities and limits;
-2. define the venue-neutral market-data interface;
-3. implement the Webot public-data adapter;
-4. define canonical market-data models;
-5. build historical collection/cache;
-6. build deterministic feature extraction;
-7. implement the first transparent mathematical scoring baseline;
-8. build the backtest harness;
-9. model fees/spread/slippage;
-10. create the immutable signal/trade journal;
-11. evaluate honestly;
-12. add/validate regime detection;
-13. add historical analogue comparison;
-14. add forward paper trading;
-15. then connect the engine to the Verdant terminal UI.
+---
 
-## Frontend direction still valid
+# One-sentence thesis
 
-The previously established visual direction remains useful:
-
-- dark forest / aged stone / oxidized metal / restrained fantasy geometry;
-- Ocarina-of-Time-inspired atmosphere and hierarchy without copying Nintendo assets;
-- terminal-first information hierarchy;
-- active market state > historical performance > access/sales;
-- Navi-like cyan for live/pending data, Temple Gold for verification/milestones, emerald for positive/available states;
-- mobile intentionally redesigned rather than shrinking desktop.
-
-Zenom remains a reference for product/workflow ideas, not proof that its claimed profitability can be recreated.
-
-## One-sentence thesis
-
-**Zenom teaches the product concept; Ocarina-inspired design gives Verdant its visual language; Webot US defines executable constraints; the Verdant Perception Engine mathematically observes the market, compares the present to history, calculates expectancy and uncertainty, makes an explainable call, and then proves whether it deserved trust.**
+**Zenom teaches the product concept; Ocarina-inspired design gives Verdant its visual language; Webot US defines executable constraints; the Verdant Perception Engine mathematically observes the market, compares the present to history, calculates probability/expectancy/risk, produces BUY/WAIT/EXIT plus mathematically derived trade geometry, presents it simply, and then proves whether it deserved trust.**
