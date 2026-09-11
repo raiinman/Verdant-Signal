@@ -13,8 +13,9 @@ Before making architectural decisions, read these in order:
 4. `docs/VERDANT_RESEARCH_CONTRACT_V0.md`
 5. `docs/VERDANT_RESEARCH_CONTRACT_V0_1_AMENDMENT.md`
 6. `docs/VERDANT_RESEARCH_CONTRACT_V0_2_AMENDMENT.md`
-7. `docs/VERDANT_WEBOT_US_CAPABILITY_AUDIT_2026-09-11.md`
-8. `docs/VERDANT_REDDIT_VALIDATION_AND_EXECUTION_LESSONS_2026-09-11.md`
+7. `docs/VERDANT_RESEARCH_CONTRACT_V0_3_AMENDMENT.md`
+8. `docs/VERDANT_WEBOT_US_CAPABILITY_AUDIT_2026-09-11.md`
+9. `docs/VERDANT_REDDIT_VALIDATION_AND_EXECUTION_LESSONS_2026-09-11.md`
 
 Do not proceed from chat memory alone.
 
@@ -479,10 +480,11 @@ Active amendments:
 
 - `V0.1` replaces the temporary Webot transaction-fee placeholder with the verified fee schedule and versioned cost identity.
 - `V0.2` adds benchmark-relative evaluation, pre-execution validity rechecking, execution-health veto states, parameter provenance, and stronger separation of signal confidence from risk sizing.
+- `V0.3` adds the Research Trial Ledger, multiple-testing/selection-bias controls, holdout-organization discipline, return attribution, validated operating envelopes, and model Edge Health / lifecycle authority.
 
 The public Webot market-data boundary and initial tests have already been implemented. Continue implementation from the active research contract, amendments, Webot capability audit, and repository state rather than from the older instruction to create the contract.
 
-Before accepting any new feature, equation, threshold, venue assumption, or execution shortcut, check whether it conflicts with V0/V0.1/V0.2. External claims remain hypotheses until Verdant validates them itself.
+Before accepting any new feature, equation, threshold, venue assumption, or execution shortcut, check whether it conflicts with V0/V0.1/V0.2/V0.3. External claims remain hypotheses until Verdant validates them itself.
 
 ---
 # One-sentence thesis
