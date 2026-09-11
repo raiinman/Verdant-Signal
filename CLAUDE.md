@@ -1,211 +1,451 @@
-# CLAUDE.md — Verdant Signal
+# CLAUDE.md — Verdant Signal Repository Authority
 
-Repository authority for the `feature/zenom-reverse-engineering` branch. Derived from the
-Zenom Alpha Reverse-Engineering + Visual/UX Redesign Directive. Read this before changing code.
+**Branch:** `feature/zenom-reverse-engineering`
 
-## 1. What this project is
+Read this before changing code.
 
-A **frontend redesign of an existing, live system** — `https://www.zenomalpha.com/` — that
-preserves that system's publicly observable functional contract while applying an original
-visual direction.
+## 1. Authority order
 
-It is **not** a generic crypto dashboard. Zenom Alpha is a read-only public telemetry window
-onto one live Binance USD-M futures account, wrapped in a paywalled signal-copying funnel:
-position rows stay structurally visible while actionable fields are masked behind a free
-Telegram gate (first two slots) and a paid VIP gate (the rest). That is the product. Preserve it.
+Verdant Signal changed direction after the original Zenom reverse-engineering pass. The current product is **not** a Zenom Alpha clone and is not required to preserve Zenom's business model, paywall, Binance-futures semantics, or displayed profitability claims.
 
-Reconnaissance is complete and recorded in `reference/`. **Do not re-derive it from scratch;
-read it.**
+Read current authority in this order:
 
-| Document | Contents |
-|---|---|
-| `reference/SITE_INVENTORY.md` | Routes, sections, API surface, pricing, networks, assets |
-| `reference/FUNCTIONAL_CONTRACT.md` | F-01…F-17 — everything a visitor can do |
-| `reference/STATE_MATRIX.md` | Session axes, feed states, slot states, access states |
-| `reference/DESIGN_TOKENS_ORIGINAL.md` | The reference's own tokens, for fidelity comparison |
-| `reference/INTERACTION_MAP.md` | Every trigger → handler → effect, plus reference a11y gaps |
-| `reference/RESPONSIVE_MAP.md` | Measured reference behavior at 6 viewports + redesign targets |
-| `reference/PRESERVATION_MATRIX.md` | **The contract.** Every behavior's disposition |
-| `reference/REDESIGN_DECISIONS.md` | D-01…D-15 with reasoning |
-| `reference/VISUAL_QA.md` | Running defect log |
-| `reference/UNKNOWNS.md` | U-01…U-13 — what the reference does not reveal, and what was chosen |
+1. `docs/VERDANT_PROJECT_DIRECTION_2026-09-10.md`
+2. `docs/VERDANT_PERCEPTION_ENGINE_FOUNDATION_2026-09-10.md`
+3. `docs/VERDANT_TRADE_GEOMETRY_AND_MODEL_RESEARCH_2026-09-10.md`
+4. `docs/VERDANT_RESEARCH_CONTRACT_V0.md`
+5. `docs/VERDANT_RESEARCH_CONTRACT_V0_1_AMENDMENT.md`
+6. `docs/VERDANT_WEBOT_US_CAPABILITY_AUDIT_2026-09-11.md`
+7. `docs/NEXT_CHAT_HANDOFF.md`
 
-## 2. Non-negotiable constraints
+If an older repository note conflicts with those documents, the newer authority above wins.
 
-### 2.1 Preservation
+### Current one-sentence thesis
 
-- Every behavior in `PRESERVATION_MATRIX.md` keeps its disposition. **Nothing disappears silently.**
-- Changing behavior without authorization recorded in that file is a **defect**, not a refactor.
-- Adding a feature requires a matrix row. Removing one requires explicit user authorization.
+> Zenom teaches the product concept; Ocarina-inspired design gives Verdant its visual language; Webot US defines executable constraints; the Verdant Perception Engine mathematically observes the market, compares the present to history, calculates probability/expectancy/risk, produces BUY/WAIT/EXIT plus mathematically derived trade geometry, presents it simply, and then proves whether it deserved trust.
 
-### 2.2 Data integrity — the hard line
+---
 
-**Never invent performance figures, verification claims, financial results, users,
-transactions, prices, addresses, or backend capabilities.**
+## 2. What the old Zenom work is now
 
-Every rendered number traces to `src/fixtures/telemetry.json` (a verbatim `/api/status`
-capture) or to a reference source constant. Pricing is $9 / $19 / $39 / $99 with strike-throughs
-$19 / $49 / $99 / $299 — verbatim. Payment networks are exactly the four reachable ones. Legal
-text is copied verbatim and never paraphrased, shortened, or "improved".
+The `reference/` directory remains valuable reverse-engineering research. It records publicly observable Zenom Alpha information architecture, interactions, responsive behavior, visual hierarchy, and earlier reconstruction decisions.
 
-Simulated drift for offline development may perturb only values the live feed also moves
-(equity, mark price, ROE, uPnL), within observed ranges. It may never invent an instrument,
-an exit, or a user.
+Use it as:
 
-### 2.3 Safety
+- product/UX reference;
+- information-architecture research;
+- visual-comparison history;
+- evidence of patterns worth keeping or rejecting.
 
-- No attacking servers, no auth bypass, no exploitation.
-- **No real payments. No wallet interaction.** The four mutating endpoints
-  (`/api/telegram-auth`, `/api/auth-start`, `/api/auth-poll`, `/api/check-deposit-status`) have
-  never been called and must not be. Use fixtures and the dev mock resolver.
-- Reference capture is read-only: GET the two public endpoints, screenshot, inspect.
+Do **not** treat it as current authority that Verdant must preserve:
 
-### 2.4 Original design
+- Zenom's Telegram/paywall funnel;
+- Binance USD-M futures semantics;
+- leverage/liquidation/short-position behavior;
+- Zenom's performance numbers;
+- Zenom's backend contract;
+- Zenom's exact route or feature set.
 
-Inherit the design *grammar* of Ocarina of Time — Kokiri Forest, Temple of Time stonework,
-N64 equipment hierarchy, fairy-like cyan. **Never** reproduce Nintendo artwork, logos,
-Triforce graphics, characters, textures, screenshots, game UI assets, or lifted iconography.
-Everything ships as original CSS geometry and inline SVG.
+A historical `PRESERVATION_MATRIX.md` row is not allowed to override the current Verdant project-direction or research-contract documents.
 
-### 2.5 Accessibility floor
+Do not delete the reference material merely because the project pivoted. Historical research remains useful.
 
-Theme never wins over usability. Required: keyboard operation of every control, visible
-`:focus-visible`, real semantic elements (never `<div onclick>`), accessible tabs and dialogs
-(`aria-modal`, focus trap, `Esc`, focus restore), `aria-live` for status changes, descriptive
-labels on copy buttons, no color-only state encoding, ≥44px touch targets, `prefers-reduced-motion`
-support, working 200% zoom. The reference's `user-scalable=no` is **removed and stays removed**.
+---
 
-### 2.6 Information priority
+## 3. Current product architecture
 
-1. **Level 1 — what is happening now:** active signals, terminal connectivity, live state.
-2. **Level 2 — how it performed:** equity, realized, verified exits, journal.
-3. **Level 3 — how to get access:** Telegram, plans, payment, activation.
+Keep these systems conceptually and technically separable:
 
-**Level 3 must never visually overpower Level 1. The terminal is the hero.**
+```text
+MarketDataProvider
+        |
+        v
+PerceptionEngine(MarketFrame) -> MarketAssessment
+        |
+        v
+StrategyEngine(MarketAssessment, PortfolioState) -> BUY | WAIT | EXIT
+        |
+        v
+TradeGeometry(MarketAssessment, StrategyState) -> Entry / Stop / Targets / Size
+        |
+        v
+PaperExecution(Decision, Geometry, MarketState) -> SimulatedFills
+        |
+        v
+Evaluation(Signals, Fills, Outcomes) -> PerformanceEvidence
+```
 
-## 3. Design system rules
+Exchange-specific networking belongs behind adapters. Webot-specific response shapes must not leak throughout the Perception Engine.
 
-### 3.1 Palette — use these tokens, never raw hex in components
+The immutable research sequence is:
+
+```text
+MarketFrame
+  -> FeatureVector
+  -> MarketAssessment
+  -> Decision
+  -> TradeGeometry
+  -> PaperOrder
+  -> PaperFill
+  -> Outcome
+  -> EvaluationRecord
+```
+
+Future outcomes append later; they never rewrite earlier observations or decisions.
+
+---
+
+## 4. Phase and financial boundaries
+
+### Current phase: paper research only
+
+Authorized:
+
+- official public market-data ingestion;
+- historical collection/caching;
+- mathematical feature extraction;
+- model research/backtesting;
+- paper fills;
+- immutable signal/outcome records;
+- Webot public REST adapter;
+- read-only venue capability probes.
+
+Not authorized:
+
+- live-money order placement;
+- real wallet interaction;
+- deposits/withdrawals;
+- activating private trading credentials merely to advance implementation;
+- leverage/futures/liquidation assumptions;
+- executable short positions unless later venue support and project authority explicitly establish them.
+
+Current executable research state machine is spot-first:
+
+```text
+FLAT / WAIT -> BUY -> LONG / HOLD -> EXIT -> FLAT / WAIT
+```
+
+Bearish evidence can cause WAIT or EXIT. It is not automatically a short trade.
+
+---
+
+## 5. Data integrity — the hard line
+
+Never invent:
+
+- exchange capabilities;
+- symbols;
+- prices;
+- fee schedules;
+- historical depth;
+- market liquidity;
+- fills;
+- performance figures;
+- probabilities;
+- confidence percentages;
+- users;
+- verification claims.
+
+Every research number must trace to:
+
+- a stored raw market record;
+- an explicit equation;
+- a versioned policy;
+- or a cited/recorded venue fact.
+
+### Time integrity
+
+At decision timestamp `t`:
+
+```text
+data_timestamp <= decision_timestamp
+```
+
+No future candle values. No full-dataset normalization. No outcome-aware repair. No backfilling an earlier decision after learning what happened.
+
+### Precision
+
+The Webot API documents price/quantity/amount fields as decimal strings. Preserve raw strings at the transport boundary. Do not casually round venue data just because JavaScript uses `number` internally elsewhere.
+
+---
+
+## 6. Current Webot US authority
+
+From current official API documentation:
+
+- base URL: `https://api.webot.com`;
+- market type currently documented as `SPOT`;
+- public REST endpoints include symbols, recent trades, depth, tickers, and klines;
+- documented kline intervals include `15M`, `60M`, and `4H`;
+- documented limit: 10 requests/second per IP;
+- a current WebSocket endpoint is not documented in the main API reference;
+- exact oldest historical candle depth is unresolved and must be probed;
+- live `/api/v1/common/symbols` is the authority for the current enabled symbol universe.
+
+Current official Webot US fee schedule observed 2026-09-11:
+
+- taker 0.5% (50 bps) per side;
+- maker 0.1% (10 bps) per side.
+
+Fee schedules are versioned inputs because the venue reserves the right to change them.
+
+Do not use maker fees in a simulation without a defensible passive-fill model.
+
+---
+
+## 7. Research-contract implementation rules
+
+`docs/VERDANT_RESEARCH_CONTRACT_V0.md` and amendments define the exact initial protocol. Do not silently optimize or substitute values.
+
+Key V0 locks include:
+
+- 15-minute completed-candle decision cadence;
+- completed 1h + 4h context;
+- past-only robust rolling median/MAD normalization;
+- 4-hour primary outcome horizon;
+- transparent score + L2 logistic + historical analogue model tournament;
+- conservative same-candle unresolved ordering;
+- 0.50% paper-account risk fraction with concentration caps;
+- explicit MAE/MFE collection;
+- separate prediction vs trade-geometry research;
+- chronological exploration/tune/validation/untouched-holdout workflow;
+- forward paper before any future live-money consideration;
+- default WAIT when qualified models materially disagree.
+
+If evidence later warrants changing a research rule, create a versioned amendment **before** evaluating the new generation. Do not rewrite the old experiment to make history look cleaner.
+
+---
+
+## 8. Explainability and ADHD-first output
+
+Locked product principle:
+
+> **Simple answer. Deep proof.**
+
+The default decision view should make these obvious in fixed positions:
+
+1. What is the call?
+2. How strong is it?
+3. Where can I enter?
+4. What is the do-not-chase price?
+5. Where is the stop / where is the thesis wrong?
+6. Where are the targets?
+7. How risky is it?
+8. What does history say?
+9. What is the main warning?
+10. What should I do next?
+
+Technical derivation stays one action away under `SHOW THE MATH`.
+
+No dense dashboard may bury the decision. No decorative confidence percentage is allowed.
+
+---
+
+## 9. Original visual direction
+
+The original visual direction remains useful and active where it does not conflict with the product pivot.
+
+Inherit the design *grammar* and atmosphere of Ocarina of Time — Kokiri Forest, Temple of Time stonework, classic equipment-menu hierarchy, fairy-like cyan — without copying Nintendo assets.
+
+Never reproduce:
+
+- Nintendo artwork;
+- logos;
+- Triforce graphics;
+- characters;
+- textures/screenshots;
+- game UI assets;
+- lifted iconography.
+
+Everything ships as original CSS geometry, typography, and original/in-house SVG where appropriate.
+
+### Decoration test
+
+> Does this make the information hierarchy clearer?
+
+If no, do not add it.
+
+---
+
+## 10. Design-system rules
+
+### Palette — use tokens, not raw component hex values
 
 `--vs-bg-deep #08110C` · `--vs-surface #101C14` · `--vs-panel #17241A` · `--vs-moss #233524`
 `--vs-kokiri #3E8F47` · `--vs-emerald #59D36B` · `--vs-navi #55DDE0` · `--vs-hylian #315C8C`
 `--vs-gold #D5A943` · `--vs-gold-bright #F0C85A` · `--vs-parchment #E8E1C8` · `--vs-stone #9BA796`
 `--vs-danger #B93A3A` · `--vs-critical #E45A4F`
 
-Banned: pure black, pure white, electric-purple crypto gradients, rainbow gradients, excessive
-glassmorphism, generic cyberpunk, glowing borders everywhere.
+Banned: pure black, pure white, electric-purple crypto gradients, rainbow gradients, excessive glassmorphism, generic cyberpunk, glowing borders everywhere.
 
-### 3.2 Semantic color — colors have one job each
+### Semantic color
 
-| Color | Only for |
+| Color | Primary semantic job |
 |---|---|
 | Navi Cyan | streaming/live, network activity, pending, telemetry, hover/focus illumination |
-| Temple Gold | verification, milestones, selected premium, achievement, completed stages |
-| Emerald | positive actions, confirmation, available interactions, healthy states |
-| Red | danger, failure, destructive, negative performance |
+| Temple Gold | verification, milestones, selected states, achievement/completion |
+| Emerald | positive actions, confirmation, healthy/available states |
+| Red | danger, failure, destructive action, negative performance |
 
-Verified exits are **gold, not green**. Never use every accent at once.
+Do not use every accent at once.
 
-### 3.3 Typography
+### Typography
 
-Data/telemetry in JetBrains Mono with tabular figures. Display headings in a restrained serif,
-small caps, wide tracking. Body in a humanist sans. **No novelty medieval fonts for body copy —
-readability outranks theme.** Minimum size 11px; no fractional sizes.
+- telemetry/data: JetBrains Mono with tabular figures;
+- display headings: restrained serif, small caps/wide tracking where appropriate;
+- body: humanist sans;
+- no novelty medieval body fonts;
+- minimum text size 11px;
+- avoid fractional font sizes.
 
-### 3.4 Component language
+### Component language
 
-Beveled/clipped corners, nested rectangular frames, engraved separators, inset panels, gold
-selection brackets, layered dark-green surfaces, mild noise, deliberate depth. **Do not border
-everything.** Hierarchy comes from spacing → depth → typography → scale → selective accent.
-Decoration comes last.
+Beveled/clipped corners, nested rectangular frames, engraved separators, inset panels, gold selection brackets, layered dark-green surfaces, mild noise, deliberate depth.
 
-**The decoration test:** does this make the information hierarchy clearer? If no, do not add it.
+Do not border everything. Hierarchy should come from spacing -> depth -> typography -> scale -> selective accent -> decoration.
 
-### 3.5 Motion
+### Motion
 
-100–220 ms. Allowed: bracket movement, small status pulses, data-change illumination, drawer,
-tab indicator, progress transitions, focus illumination. Banned: bouncing, floating cards,
-perpetual shimmer, particles, animated backgrounds, parallax. Always honour
-`prefers-reduced-motion`.
+100–220 ms. Allowed: small status/data-change illumination, bracket movement, drawers, tab indicators, progress/focus transitions.
 
-### 3.6 Tokens
+Banned: bouncing, floating cards, perpetual shimmer, particles, animated backgrounds, parallax.
 
-All colors, type, spacing, radii, bevel geometry, borders, depth, shadow, glow, duration, focus
-and selection treatments live in `src/styles/tokens.css`. **No arbitrary one-off values in
-component CSS.**
+Always honor `prefers-reduced-motion`.
 
-## 4. Architecture
+### Tokens
 
-```
+Colors, type, spacing, radii, bevel geometry, borders, depth, shadow, glow, duration, focus and selection treatments belong in `src/styles/tokens.css`. Avoid arbitrary one-off values in component CSS.
+
+---
+
+## 11. Accessibility floor
+
+Theme never wins over usability.
+
+Required where applicable:
+
+- keyboard operation of every control;
+- visible `:focus-visible`;
+- semantic elements rather than clickable divs;
+- correct accessible tabs/dialogs;
+- focus trap, `Esc`, and focus restore for modal dialogs;
+- `aria-live` for status changes that need announcement;
+- descriptive control labels;
+- no color-only state encoding;
+- >=44px touch targets;
+- `prefers-reduced-motion` support;
+- working 200% zoom;
+- no disabling user scaling.
+
+---
+
+## 12. Existing frontend architecture
+
+Current legacy/frontend tree is approximately:
+
+```text
 src/
-  components/    shell, terminal, rail, exits, access, primitives
-  hooks/         useTelemetry, useSession, useToast, useReducedMotion
-  lib/           masking rules, formatters, derived stats
-  types/         API contract types mirroring /api/status
-  fixtures/      telemetry.json — verbatim capture, do not hand-edit
-  styles/        tokens.css, base.css
-reference/       documentation + screenshots (reference/ and implementation/)
-scripts/         capture-reference.mjs, capture.mjs, viewports.mjs
+  components/
+  hooks/
+  lib/
+  types/
+  fixtures/
+  styles/
+reference/
+scripts/
+tests/
 ```
 
-**Masking rules live in exactly one place** — `src/lib/masking.ts`. The predicate is
-`isVipUser || (isFreeCall && isFreeUnlocked)`, ported verbatim, including the rule that a losing
-locked VIP slot shows `ACTIVE RANGE` / `SL Guarded` / `ACCUMULATION` instead of a negative
-number. Never duplicate this logic into a component.
+Do not force the quantitative engine into UI components.
 
-## 5. Validation commands
+Prefer creating clear new boundaries such as:
+
+```text
+src/
+  market/
+    providers/
+    schemas/
+  research/
+    features/
+    models/
+    geometry/
+    execution/
+    evaluation/
+    records/
+```
+
+Exact folder names may adapt to the actual codebase, but separation of concerns is authority.
+
+Legacy masking/telemetry code may remain while the product transition is underway; do not let it become the new engine architecture.
+
+---
+
+## 13. Validation commands
+
+Existing repository commands:
 
 ```bash
-npm run dev          # Vite dev server, http://localhost:5173
-npm run build        # tsc -b && vite build — must pass with zero errors
-npm run typecheck    # tsc -b --noEmit
-npm run lint         # eslint .
-npm run shots        # implementation screenshots, all 6 viewports
-npm run shots:ref    # re-capture the live reference (read-only)
+npm run dev
+npm run build
+npm run typecheck
+npm run lint
+npm run shots
+npm run shots:ref
 ```
 
-Before any commit: **build, typecheck, and lint must pass.** Then capture screenshots and
-compare against `reference/screens/reference/` at the same viewport.
+Before a code checkpoint, at minimum build, typecheck, and lint must pass when the environment permits.
 
-### QA viewports — all six, every pass
+Quantitative/research code must additionally gain deterministic unit tests for:
 
-`375×812` · `430×932` · `768×1024` · `1024×768` · `1440×900` · `1920×1080`
+- timestamp eligibility;
+- candle completion;
+- decimal parsing/precision boundaries;
+- feature equations;
+- rolling normalization without future leakage;
+- rate-limit/backoff behavior;
+- pagination/deduplication;
+- fill/cost accounting;
+- intrabar tie rules;
+- immutable-record linkage.
 
-### Visual QA loop
+Do not claim a test passed unless it actually ran.
 
-Run → capture → inspect hierarchy, spacing, clipping/overflow, typography, data density,
-interactive states, mobile transformation → fix → record in `reference/VISUAL_QA.md` as
-Issue / Viewport / Expected / Observed / Fix / Status.
+---
 
-**The work is not finished when the page compiles.**
+## 14. Git
 
-## 6. State completeness
-
-Before calling a component complete, verify every state that can actually occur:
-`DEFAULT HOVER FOCUS ACTIVE SELECTED DISABLED LOCKED LOADING EMPTY SUCCESS WARNING ERROR
-DISCONNECTED STALE LIVE`. Not every component needs every state — but every state that can
-occur needs an intentional presentation. Coverage table: `reference/STATE_MATRIX.md` §6.
-
-## 7. Git
-
-- Work on `feature/zenom-reverse-engineering`. **Never commit to `main`.**
+- Work on `feature/zenom-reverse-engineering`.
+- Never commit directly to `main` unless the user later changes branch authority.
 - Do not open or merge a pull request until asked.
-- Commit coherent working checkpoints; push to the existing upstream branch.
+- Commit coherent working checkpoints to the existing branch.
 
-## 8. When something is unknown
+---
 
-Record it in `reference/UNKNOWNS.md`, choose the **least destructive reasonable
-reconstruction**, and continue. Do not stall on ordinary implementation decisions already
-covered by this file. Do not substitute design advice for working code.
+## 15. Unknowns
 
-## 9. Target feel
+Unknown is a legitimate state.
 
-*"What if the Ocarina of Time pause/inventory interface evolved for 25 years and became a
-serious quantitative workstation?"* — Kokiri Forest atmosphere + Temple of Time seriousness +
-classic equipment-menu hierarchy + modern Bloomberg-grade information density.
+For ordinary implementation unknowns:
 
-Mysterious, old-world, slightly arcane, technologically sophisticated, readable, precise,
-tactile, disciplined, original.
+- record the uncertainty;
+- choose the least destructive/reversible implementation;
+- continue.
 
-Not: generic Web3 purple, rainbow gradients, glassmorphism, enormous marketing heroes,
-wall-to-wall cards, unnecessary glow, fantasy clutter, or direct game imitation.
+For research-critical unknowns such as fee schedules, historical depth, candle completeness, or execution semantics:
+
+- do not guess silently;
+- mark them unresolved;
+- create a probe or versioned assumption;
+- preserve the result as research evidence.
+
+---
+
+## 16. Target feel
+
+> *What if the Ocarina of Time pause/inventory interface evolved for 25 years and became a serious quantitative workstation?*
+
+Kokiri Forest atmosphere + Temple of Time seriousness + classic equipment-menu hierarchy + modern quantitative-workstation clarity.
+
+Mysterious, old-world, slightly arcane, technologically sophisticated, readable, precise, tactile, disciplined, original.
+
+Not generic Web3 purple, rainbow gradients, glassmorphism, enormous marketing heroes, wall-to-wall cards, unnecessary glow, fantasy clutter, or direct game imitation.
