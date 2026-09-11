@@ -10,11 +10,15 @@ Before making architectural decisions, read these in order:
 1. `docs/VERDANT_PROJECT_DIRECTION_2026-09-10.md`
 2. `docs/VERDANT_PERCEPTION_ENGINE_FOUNDATION_2026-09-10.md`
 3. `docs/VERDANT_TRADE_GEOMETRY_AND_MODEL_RESEARCH_2026-09-10.md`
+4. `docs/VERDANT_RESEARCH_CONTRACT_V0.md`
+5. `docs/VERDANT_RESEARCH_CONTRACT_V0_1_AMENDMENT.md`
+6. `docs/VERDANT_RESEARCH_CONTRACT_V0_2_AMENDMENT.md`
+7. `docs/VERDANT_WEBOT_US_CAPABILITY_AUDIT_2026-09-11.md`
+8. `docs/VERDANT_REDDIT_VALIDATION_AND_EXECUTION_LESSONS_2026-09-11.md`
 
 Do not proceed from chat memory alone.
 
-The second and third files are additive authority created after the project-direction pivot. Together they capture the mathematical decision architecture, historical-pattern approach, validation philosophy, model-research strategy, trade geometry, explainability requirements, and ADHD-first output rules.
-
+The research contract and its amendments are active mathematical/research authority. The Webot audit defines verified venue capabilities. The Reddit lessons document is adversarial supporting research: its controls are useful where incorporated by V0.2, but Reddit claims, thresholds, and profitability screenshots are not evidence.
 ---
 
 # Current project thesis
@@ -467,51 +471,20 @@ ADHD-first remains a product requirement:
 
 ---
 
-# Immediate next task — DO NOT SKIP
+# Current implementation status / next authority
 
-Before substantial engine coding, create:
+`docs/VERDANT_RESEARCH_CONTRACT_V0.md` already exists and is ACTIVE. Do **not** recreate it.
 
-`docs/VERDANT_RESEARCH_CONTRACT_V0.md`
+Active amendments:
 
-The contract must explicitly define at least:
+- `V0.1` replaces the temporary Webot transaction-fee placeholder with the verified fee schedule and versioned cost identity.
+- `V0.2` adds benchmark-relative evaluation, pre-execution validity rechecking, execution-health veto states, parameter provenance, and stronger separation of signal confidence from risk sizing.
 
-1. decision cadence / primary timeframe;
-2. higher-timeframe context;
-3. exact information allowed at each decision timestamp;
-4. canonical initial feature families;
-5. candidate baseline measurement equations;
-6. exact normalization method;
-7. initial regime definitions;
-8. exact successful-outcome label(s);
-9. candidate-model tournament and comparison metrics;
-10. historical analogue distance / neighbor protocol;
-11. minimum analogue sample requirements;
-12. MAE / MFE measurement protocol;
-13. baseline stop-policy candidates;
-14. baseline target-policy candidates;
-15. entry-zone / maximum-acceptable-entry methodology;
-16. position-sizing policy for paper mode;
-17. thesis-deterioration EXIT candidates;
-18. trailing-stop candidate(s);
-19. maximum-hold policy;
-20. realistic fill assumptions;
-21. fee / spread / slippage assumptions;
-22. intrabar tie-breaking when stop and target are both touched but event order is unknown;
-23. train / tune / validation / holdout chronology;
-24. threshold-selection protocol;
-25. feature acceptance / rejection / ablation protocol;
-26. model-disagreement handling;
-27. distinction among raw score, empirical probability, expectancy, strength, and risk;
-28. forward-paper validation requirements;
-29. simple-output schema;
-30. `SHOW THE MATH` derivation schema.
+The public Webot market-data boundary and initial tests have already been implemented. Continue implementation from the active research contract, amendments, Webot capability audit, and repository state rather than from the older instruction to create the contract.
 
-Do not treat illustrative weights, thresholds, prices, win rates, ATR multipliers, risk fractions, or confidence values from conversation examples as tested facts.
-
-After the research contract is explicit, proceed to market-data/API work and implementation.
+Before accepting any new feature, equation, threshold, venue assumption, or execution shortcut, check whether it conflicts with V0/V0.1/V0.2. External claims remain hypotheses until Verdant validates them itself.
 
 ---
-
 # One-sentence thesis
 
 **Zenom teaches the product concept; Ocarina-inspired design gives Verdant its visual language; Webot US defines executable constraints; the Verdant Perception Engine mathematically observes the market, compares the present to history, calculates probability/expectancy/risk, produces BUY/WAIT/EXIT plus mathematically derived trade geometry, presents it simply, and then proves whether it deserved trust.**
