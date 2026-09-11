@@ -3,7 +3,7 @@
   "private": true,
   "version": "0.1.0",
   "type": "module",
-  "description": "Verdant Signal — a redesigned frontend for the Zenom Alpha systematic prediction terminal.",
+  "description": "Verdant Signal — an explainable paper-first quantitative market perception and decision system.",
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
@@ -12,6 +12,7 @@
     "typecheck": "tsc -b --noEmit",
     "shots": "node scripts/capture.mjs",
     "shots:ref": "node scripts/capture-reference.mjs",
+    "probe:webot": "node scripts/probe-webot.mjs",
     "test": "playwright test"
   },
   "dependencies": {
